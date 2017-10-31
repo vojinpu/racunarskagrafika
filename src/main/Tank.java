@@ -8,7 +8,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 import rafgfxlib.Util;
 
 public class Tank {
-	private int x,y;
+	private float x,y;
 	private int startY;
 	private BufferedImage tank;
 	private BufferedImage tank_with_parashute;
@@ -155,11 +155,11 @@ public class Tank {
 		translateTank();
 	}
 	
-	public int getX(){
+	public float getX(){
 		return x;
 	}
 	
-	public int getY(){
+	public float getY(){
 		return y;
 	}
 	
