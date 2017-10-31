@@ -3,6 +3,8 @@ package main;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
+import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
+
 import rafgfxlib.Util;
 
 public class MyUtil {
@@ -14,10 +16,10 @@ public class MyUtil {
 		u = Util.clamp(u - 0.5f, 0.0f, width - 1.0f);
 		v = Util.clamp(v - 0.5f, 0.0f, height - 1.0f);
 		
-		int[] UL = new int[4];
-		int[] UR = new int[4];
-		int[] LL = new int[4];
-		int[] LR = new int[4];
+		int[] UL = new int[color.length];
+		int[] UR = new int[color.length];
+		int[] LL = new int[color.length];
+		int[] LR = new int[color.length];
 
 		int x0 = (int)u;
 		int y0 = (int)v;
@@ -35,19 +37,21 @@ public class MyUtil {
 		src.getPixel(x0, y1, LL);
 		src.getPixel(x1, y1, LR);
 		
-		int[] a = new int[4];
-		int[] b = new int[4];
+		int[] a = new int[color.length];
+		int[] b = new int[color.length];
 		
-		Util.lerpRGBAi(UL, UR, fX, a);
-		Util.lerpRGBAi(LL, LR, fX, b);
-		Util.lerpRGBAi(a, b, fY, color);
+		if(color.length == 4)Util.lerpRGBAi(UL, UR, fX, a);
+		else Util.lerpRGBi(UL, UR, fX, a);
+		if(color.length == 4)Util.lerpRGBAi(LL, LR, fX, b);
+		else Util.lerpRGBi(LL, LR, fX, b);
+		if(color.length == 4)Util.lerpRGBAi(a, b, fY, color);
+		else Util.lerpRGBi(a, b, fY, color);
 	}
 	
 	public static BufferedImage scale(BufferedImage image,int scaleW,int scaleH){
 		WritableRaster source = image.getRaster();
-		WritableRaster target = Util.createRaster(scaleW, scaleH, true);
-		
-		int rgb[] = new int[4];
+		WritableRaster target = Util.createRaster(scaleW, scaleH, source.getNumBands() == 4?true:false);
+		int rgb[] = new int[source.getNumBands()];
 		
 		
 		for(int y = 0; y < scaleH; y++)
@@ -74,9 +78,9 @@ public class MyUtil {
 		WritableRaster source = image.getRaster();
 		int scaleW = (int) (source.getWidth() * proportion);
 		int scaleH = (int) (source.getHeight() * proportion);
-		WritableRaster target = Util.createRaster(scaleW, scaleH, true);
+		WritableRaster target = Util.createRaster(scaleW, scaleH, source.getNumBands() == 4?true:false);
 		
-		int rgb[] = new int[4];
+		int rgb[] = new int[source.getNumBands()];
 		
 		
 		for(int y = 0; y < scaleH; y++)
@@ -103,9 +107,9 @@ public class MyUtil {
 		WritableRaster source = image.getRaster();
 		int scaleW = source.getWidth();
 		int scaleH = source.getHeight();
-		WritableRaster target = Util.createRaster(scaleW, scaleH, true);
+		WritableRaster target = Util.createRaster(scaleW, scaleH, source.getNumBands() == 4?true:false);
 		
-		int rgb[] = new int[4];
+		int rgb[] = new int[source.getNumBands()];
 		
 		
 		for(int y = 0; y < scaleH; y++)
@@ -120,6 +124,36 @@ public class MyUtil {
 				}
 				source.getPixel(dX, y, rgb);
 				target.setPixel(x, y, rgb);				
+			}
+		}
+		
+		return Util.rasterToImage(target);
+	}
+	public static BufferedImage addMask(BufferedImage image, BufferedImage mask,int xx, int yy) {
+		WritableRaster source = mask.getRaster();
+		int scaleW = source.getWidth();
+		int scaleH = source.getHeight();
+		WritableRaster target = image.getRaster();
+		
+		int rgba[] = new int[source.getNumBands()];
+		int rgbTarget[] = new int[target.getNumBands()];
+		
+		
+		for(int y = 0; y < scaleH; y++)
+		{
+			for(int x = 0; x < scaleW; x++)
+			{
+					source.getPixel(x, y, rgba);
+					target.getPixel(x+xx, y+yy, rgbTarget);
+					if(rgba[3]> 50) {
+						rgbTarget[0] -= rgba[3];
+						rgbTarget[1] -= rgba[3];
+						rgbTarget[2] -= rgba[3];
+						if(rgbTarget[0] < 0)rgbTarget[0] = 0;
+						if(rgbTarget[1] < 0)rgbTarget[1] = 0;
+						if(rgbTarget[2] < 0)rgbTarget[2] = 0;
+						target.setPixel(x+xx, y+yy, rgbTarget);
+					}
 			}
 		}
 		

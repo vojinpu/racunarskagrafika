@@ -81,7 +81,7 @@ public class Game extends GameFrame{
 
 	@Override
 	public void update() {
-		background.update(getMouseX(), getMouseY());
+		background.update(getMouseX(), getMouseY(),tank);
 		
 		if(isKeyDown(KeyEvent.VK_UP) || isKeyDown(KeyEvent.VK_W))tank.moveForward();
 		if(isKeyDown(KeyEvent.VK_DOWN) || isKeyDown(KeyEvent.VK_S))tank.moveBackward();

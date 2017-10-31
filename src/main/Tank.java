@@ -9,7 +9,9 @@ import rafgfxlib.Util;
 
 public class Tank {
 	private int x,y;
+	private int startY;
 	private BufferedImage tank;
+	private BufferedImage tank_with_parashute;
 	private BufferedImage tank_turret;
 	private double turretAngle;
 	private double tankAngle;
@@ -18,15 +20,36 @@ public class Tank {
 	private double tankRotateSpeed = 0.05;
 	private double turretRotateSpeed = 0.008;
 	private double tankMovementSpeed = 5.0;
-	private int mouseX = 800;
-	private int mouseY = 200;
+	private int mouseX;
+	private int mouseY;
+	private double parashuteAngle;
+	private double parashuteRotationSpeed = 0.019;
+	private double parashuteRotationAcceleration = -0.001;
+	
+	public boolean startGame = false;
 	
 	private AffineTransform tankTransform = new AffineTransform();
 	private AffineTransform turretTransform = new AffineTransform();
 	
 	public Tank(int x,int y){
+		
+		//startParashuteAnimation();
 		this.x = x;
-		this.y = y;
+		this.y = -20;
+		startY = y;
+		mouseX = x + 600;
+		mouseY = y;
+		tank_with_parashute = Util.loadImage("/tank_with_parashute.png");
+		tank_with_parashute = MyUtil.scaleSameProportion(tank_with_parashute, 0.5f);
+		
+		tankTransform.setToIdentity();
+		tankTransform.translate(x, y);
+		startParashuteAnimation();
+	}
+	
+	public void setTankStartPos() {
+		y = startY;
+		
 		tank = Util.loadImage("/tank.png");
 		tank_turret = Util.loadImage("/tank_turret.png");
 		
@@ -37,7 +60,6 @@ public class Tank {
 		moveY = 0;
 		
 		setInitialPositions();
-		
 	}
 	
 	public void setInitialPositions(){
@@ -52,10 +74,11 @@ public class Tank {
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 	}
 	public BufferedImage getTankImage(){
-		return tank;
+		if(startGame) return tank;
+		else return tank_with_parashute;
 	}
 	public BufferedImage getTankTurretImage(){
-		return tank_turret;
+		return startGame==true?tank_turret:null;
 	}
 	public AffineTransform getTankTransform(){
 		return tankTransform;
@@ -64,6 +87,8 @@ public class Tank {
 		return turretTransform;
 	}
 	public void rotateTurret(int mouseX,int mouseY){
+		if(tank_turret==null)return;
+		
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
 		
@@ -126,7 +151,7 @@ public class Tank {
 	public void move(double dX, double dY){
 		x += dX;
 		y += dY;
-		
+		if(tank==null || tank_turret == null)return;
 		translateTank();
 	}
 	
@@ -174,6 +199,40 @@ public class Tank {
 					e.printStackTrace();
 				}
 				move(dX,dY);
+			}
+		}).start();
+	}
+	
+	public void moveParashute() {
+		y+=2;
+		tankTransform.setToIdentity();
+		tankTransform.translate(x, y);
+		parashuteRotationSpeed+=parashuteRotationAcceleration;
+		if(parashuteRotationSpeed< -0.02 || parashuteRotationSpeed > 0.02) {
+			parashuteRotationAcceleration*=-1;
+		}
+		parashuteAngle += parashuteRotationSpeed;
+		tankTransform.rotate(parashuteAngle + Math.PI );
+		tankTransform.translate(-tank_with_parashute.getWidth() / 2, -tank_with_parashute.getHeight() / 2);
+	}
+	public void startParashuteAnimation() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				while (y <startY - 100) {
+					moveParashute();
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				}
+				setTankStartPos();
+				startGame = true;
 			}
 		}).start();
 	}

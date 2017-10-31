@@ -124,17 +124,18 @@ public class Background
 	
 	
 
-	public void update(int mouseX, int mouseY) 
+	public void update(int mouseX, int mouseY, Tank tank) 
 	{
-		
-		System.out.println("getMouseX()" + " " + mouseX);
-		System.out.println("getMouseY()" + " " + mouseY);
+		int camXMovement = camX;
+		int camYMovement = camY;
+		//System.out.println("getMouseX()" + " " + mouseX);
+		//System.out.println("getMouseY()" + " " + mouseY);
 		if(mouseX < windowWidth / 10) camX -= 10;
 		if(mouseX > windowWidth / 10 * 9) camX += 10;
 		if(mouseY < windowHeight / 10) camY -= 10;
 		if(mouseY > windowHeight / 10 * 9) camY += 10;
 
-		System.out.println(camX + " " + (mapW - 7) * TILE_W);
+		//System.out.println(camX + " " + (mapW - 7) * TILE_W);
 		
 		
 		if(camX < - 2 * TILE_W) camX = -2 * TILE_W;
@@ -144,10 +145,6 @@ public class Background
 		if(camY >  (mapH - 7) * TILE_H) camY = (mapH - 7) * TILE_H;
 		
 		
-//		if(isKeyDown(KeyEvent.VK_LEFT)) camX -= 10;
-//		if(isKeyDown(KeyEvent.VK_RIGHT)) camX += 10;
-//		if(isKeyDown(KeyEvent.VK_UP)) camY -= 10;
-//		if(isKeyDown(KeyEvent.VK_DOWN)) camY += 10;
 
 		selX = (mouseX + camX) / TILE_W;
 		selY = (mouseY + camY) / TILE_H;
@@ -157,7 +154,9 @@ public class Background
 		if(selX >= mapW) selX = mapW - 1;
 		if(selY >= mapH) selY = mapH - 1;
 		
-		
+		camXMovement -= camX;
+		camYMovement -= camY;
+		tank.move(camXMovement, camYMovement);
 
 	}
 
