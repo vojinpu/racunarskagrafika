@@ -19,8 +19,8 @@ public class Bullet {
 		bullet = Util.loadImage("/bullet.png");
 		bullet = MyUtil.scaleSameProportion(bullet, 0.7f);
 		this.tank = tank;
-		x = tank.getX();
-		y = tank.getY();
+		x = tank.getTurretTransform().getTranslateX() - bullet.getWidth() /2;
+		y = tank.getTurretTransform().getTranslateY() - bullet.getHeight() /2;
 	
 		angle = tank.getTurretAngle() + tank.getTankAngle();
 		
@@ -30,12 +30,11 @@ public class Bullet {
 		dX = Math.cos(angle) * bulletSpeed;
 		dY = Math.sin(angle) * bulletSpeed;
 		
-		x +=dX *2;
-		y +=dY *2;
+		x +=dX;
+		y +=dY;
 		
 		transform = new AffineTransform();
 		transform.setToIdentity();
-		transform.setTransform(tank.getTurretTransform());
 		transform.translate(x, y);
 		
 		tank.recoileBack(dX/5,dY/5);
@@ -54,14 +53,14 @@ public class Bullet {
 		//System.out.println(x+","+y+","+dX+","+dY);
 		
 		transform.setToIdentity();
-		transform.translate(x - bullet.getWidth(), y - bullet.getHeight() /2);
+		transform.translate(x , y );
 		if(angle > -Math.PI/2 && angle < Math.PI /2) {
-			transform.rotate(angle);
+			transform.rotate(angle,bullet.getWidth()/2, bullet.getHeight()/2);
+			transform.translate(- bullet.getWidth() / 2 , - bullet.getHeight()  );
 		} else {
-			transform.rotate(angle + Math.PI );
+			transform.rotate(angle + Math.PI, bullet.getWidth()/2,bullet.getHeight()/2);
+			transform.translate(bullet.getWidth() / 2 ,  bullet.getHeight()  );
 		}
-		
-		//transform.translate(-bullet.getWidth() / 2, -bullet.getHeight() / 2);
 	}
 	
 	public double getX(){
