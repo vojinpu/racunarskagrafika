@@ -5,7 +5,6 @@ import java.awt.image.WritableRaster;
 
 import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
-import rafgfxlib.ImageViewer;
 import rafgfxlib.Util;
 
 public class MyUtil {

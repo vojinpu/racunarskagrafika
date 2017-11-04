@@ -24,16 +24,14 @@ public class BulletsList {
 		}
 	}
 	public void moveBullets(int width, int height) {
-		ArrayList<Bullet> toBeRemoved = new ArrayList<>();
-		for (Bullet bullet : bullets) {
+		if(bullets.size()==0)return;
+		for(int i = bullets.size()-1;i >= 0;i--){
+			Bullet bullet = bullets.get(i);
 			bullet.moveBullet();
 			if(bullet.getX() < -bullet.getBulletImage().getWidth() || bullet.getY() < -bullet.getBulletImage().getHeight() ||
 					bullet.getX() > width + bullet.getBulletImage().getWidth() || bullet.getY() > width + bullet.getBulletImage().getHeight()){
-				toBeRemoved.add(bullet);
+				bullets.remove(i);
 			}
-		}
-		for (Bullet bullet: toBeRemoved){
-			bullets.remove(bullet);
 		}
 	}
 }
