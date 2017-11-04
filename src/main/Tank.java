@@ -9,7 +9,7 @@ import rafgfxlib.Util;
 
 public class Tank {
 	private float x,y;
-	private int startY;
+	private float startY,startX;
 	private BufferedImage tank;
 	private BufferedImage tank_with_parashute;
 	private BufferedImage tank_turret;
@@ -37,6 +37,7 @@ public class Tank {
 		this.x = x;
 		this.y = -20;
 		startY = y;
+		startX = x;
 		mouseX = x + 600;
 		mouseY = y;
 		tank_with_parashute = Util.loadImage("/tank_with_parashute.png");
@@ -49,6 +50,7 @@ public class Tank {
 	
 	public void setTankStartPos() {
 		y = startY;
+		x = startX;
 		
 		tank = Util.loadImage("/tank.png");
 		tank_turret = Util.loadImage("/tank_turret.png");
@@ -127,11 +129,10 @@ public class Tank {
 		turretTransform.rotate(turretAngle);
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 	}
-	
 	public void moveForward(){
 		x += Math.cos(tankAngle) * tankMovementSpeed;
 		y += Math.sin(tankAngle) * tankMovementSpeed;
-		
+			
 		translateTank();
 	}
 	
@@ -223,6 +224,36 @@ public class Tank {
 				// TODO Auto-generated method stub
 				while (y <startY - 100) {
 					moveParashute();
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
+				}
+				setTankStartPos();
+				startGame = true;
+			}
+		}).start();
+	}
+	public void startWaveAnimation() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				startY = y;
+				startX = x;
+				BufferedImage baseTank = Util.loadImage("/tank.png");
+				baseTank = MyUtil.scale(baseTank, 200, 150);
+				int k = 0;
+				while (y <startY + 400) {
+					k+=6;
+					y+=6;
+					tank = MyUtil.addWaves(baseTank, k);
+					tank_turret = MyUtil.addWaves(tank_turret, k);
+					translateTank();
 				try {
 					Thread.sleep(20);
 				} catch (InterruptedException e) {

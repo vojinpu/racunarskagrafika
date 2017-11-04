@@ -5,6 +5,7 @@ import java.awt.image.WritableRaster;
 
 import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
+import rafgfxlib.ImageViewer;
 import rafgfxlib.Util;
 
 public class MyUtil {
@@ -158,5 +159,81 @@ public class MyUtil {
 		}
 		
 		return Util.rasterToImage(target);
+	}
+	public static BufferedImage addWaves(BufferedImage image, int k) {
+		WritableRaster source = image.getRaster();
+		System.out.println(source.getNumBands());
+		WritableRaster target = Util.createRaster(image.getWidth()  , image.getHeight(), true);
+		
+		int rgb[] = new int[4];
+		
+		// Snaga distorzije
+		float power = 15.0f;
+		// Velicina talasa
+		float size = 0.10f;
+		
+		for(int y = 0; y < image.getHeight(); y++)
+		{			
+			for(int x = 0; x < image.getWidth(); x++)
+			{
+				// Funkcijama sin() i cos() deformisemo koordinate
+				float srcX = (float)(x + Math.sin((y+k) * size) * power);
+				float srcY = (float)(y + Math.cos(x * size) * power);
+				
+				// Koristimo deformisane koordinate za citanje bilinearnog uzorka
+				bilSampleA(source, srcX, srcY, rgb);
+				if(rgb[0] == 0 && rgb[1] == 0 && rgb[2] == 0) {
+					if(x < target.getWidth()/10 || x > target.getWidth()/10*9 || y < target.getHeight()/10 || y > target.getHeight()/10*9) {
+						rgb[3] = 0;	
+					}
+				}
+				target.setPixel(x, y, rgb);
+			}
+		}
+		
+		return Util.rasterToImage(target);
+	}
+	public static void bilSampleA(WritableRaster src, float u, float v, int[] color)
+	{
+		float[] a = new float[4];
+		float[] b = new float[4];
+		
+		int[] UL = new int[4];
+		int[] UR = new int[4];
+		int[] LL = new int[4];
+		int[] LR = new int[4];
+
+		int x0 = (int)u;
+		int y0 = (int)v;
+		int x1 = x0 + 1;
+		int y1 = y0 + 1;
+		
+		u -= x0;
+		v -= y0;
+		
+		if(x0 < 0) x0 = 0;
+		if(y0 < 0) y0 = 0;
+		if(x1 < 0) x1 = 0;
+		if(y1 < 0) y1 = 0;
+		
+		if(x0 >= src.getWidth()) x0 = src.getWidth() - 1;
+		if(y0 >= src.getHeight()) y0 = src.getHeight() - 1;
+		if(x1 >= src.getWidth()) x1 = src.getWidth() - 1;
+		if(y1 >= src.getHeight()) y1 = src.getHeight() - 1;
+		
+		src.getPixel(x0, y0, UL);
+		src.getPixel(x1, y0, UR);
+		src.getPixel(x0, y1, LL);
+		src.getPixel(x1, y1, LR);
+		
+		Util.lerpRGBAif(UL, UR, u, a);
+		Util.lerpRGBAif(LL, LR, u, b);
+		
+		color[0] = (int)(Util.lerpF(a[0], b[0], v));
+		color[1] = (int)(Util.lerpF(a[1], b[1], v));
+		color[2] = (int)(Util.lerpF(a[2], b[2], v));
+		color[3] = (int)(Util.lerpF(a[3], b[3], v));
+		
+		Util.clampRGBA(color);
 	}
 }
