@@ -177,7 +177,7 @@ public class MyUtil {
 			{
 				// Funkcijama sin() i cos() deformisemo koordinate
 				float srcX = (float)(x + Math.sin((y+k) * size) * power);
-				float srcY = (float)(y + Math.cos(x * size) * power);
+				float srcY = (float)(y + Math.cos((x+k) * size) * power);
 				
 				// Koristimo deformisane koordinate za citanje bilinearnog uzorka
 				bilSampleA(source, srcX, srcY, rgb);

@@ -233,6 +233,7 @@ public class Tank {
 					
 				}
 				setTankStartPos();
+				startWaveAnimation();
 				startGame = true;
 			}
 		}).start();
