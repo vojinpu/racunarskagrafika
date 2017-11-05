@@ -8,7 +8,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 import rafgfxlib.Util;
 
 public class Tank {
-	private float x,y;
+	private int x,y;
 	private int startY;
 	private BufferedImage tank;
 	private BufferedImage tank_with_parashute;
@@ -69,9 +69,9 @@ public class Tank {
 		tankTransform.translate(-tank.getWidth() / 2, -tank.getHeight() / 2);
 		
 		turretTransform.setTransform(tankTransform);
-		turretTransform.translate(tank.getWidth() / 3 *2, tank.getHeight() / 2);
+		turretTransform.translate(tank.getWidth() / 3 * 2, tank.getHeight() / 2);
 		turretTransform.rotate(turretAngle);
-		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
+		turretTransform.translate(-tank_turret.getWidth() / 3 * 2, -tank_turret.getHeight() / 2);
 	}
 	public BufferedImage getTankImage(){
 		if(startGame) return tank;
@@ -128,9 +128,16 @@ public class Tank {
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 	}
 	
-	public void moveForward(){
-		x += Math.cos(tankAngle) * tankMovementSpeed;
-		y += Math.sin(tankAngle) * tankMovementSpeed;
+	public void moveForward(Background background){
+		
+		int x1 = (int) (x + Math.cos(tankAngle) * tankMovementSpeed);
+		int y1 = (int) (y + Math.sin(tankAngle) * tankMovementSpeed);
+		
+		if(background.isTankAbleToMove(x1, y1)){
+			x = x1;
+			y = y1;
+		}
+		
 		
 		translateTank();
 	}
@@ -141,9 +148,14 @@ public class Tank {
 	public double getTankAngle(){
 		return tankAngle;
 	}
-	public void moveBackward(){
-		x -= Math.cos(tankAngle) * tankMovementSpeed;
-		y -= Math.sin(tankAngle) * tankMovementSpeed;
+	public void moveBackward(Background background){
+		int x1 = (int) (x - Math.cos(tankAngle) * tankMovementSpeed);
+		int y1 = (int) (y - Math.sin(tankAngle) * tankMovementSpeed);
+		
+		if(background.isTankAbleToMove(x1, y1)){
+			x = x1;
+			y = y1;
+		}
 		
 		translateTank();
 	}
@@ -155,13 +167,37 @@ public class Tank {
 		translateTank();
 	}
 	
-	public float getX(){
+	
+	public int getX1(){
+		int x1 = x;
+//		if(tank != null)
+//			x1 = (int) (x1 - Math.cos(tankAngle + Math.PI / 4) * tank.getWidth() / 2);
+//		
+//		System.out.println("Angle " + (tankAngle + Math.PI / 4));
+//		System.out.println("COS " + Math.cos(tankAngle + Math.PI / 4));
+		return x1;
+	}
+	
+	public int getY1(){
+		int y1 = y;
+//		if(tank != null)
+//			y1 = (int) (y1 - Math.sin(tankAngle + Math.PI / 4) * tank.getWidth() / 2);
+//		System.out.println("SIN " + Math.sin(tankAngle + Math.PI / 4));
+//		System.out.println();
+		
+		return y1; 
+	}
+	
+	public int getY(){
+		return y;
+	}
+	
+	public int getX(){
+				
 		return x;
 	}
 	
-	public float getY(){
-		return y;
-	}
+	
 	
 	private void translateTank(){
 		tankTransform.setToIdentity();

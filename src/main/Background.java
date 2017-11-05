@@ -56,20 +56,36 @@ public class Background {
 			tileset[i] = new Tile("tileset/svgset" + i + ".png", i);
 		}
 
+		
 		Random rnd = new Random();
 		for (int y = 0; y < mapH; ++y) {
 			for (int x = 0; x < mapW; ++x) {
 				tileMap[x][y] = Math.abs(rnd.nextInt()) % 3;
+//				tileMap[x][y] = 2;
 			}
 		}
 
+
+		int grobljeX = Math.abs(rnd.nextInt()) % mapW;
+		int grobljeY = Math.abs(rnd.nextInt()) % mapH;
+
+		for(int i = -1; i < 2; i++)
+			for(int j = -1; j < 2; j++)
+				if(grobljeX + i >= 0 && grobljeX + i < mapW
+						&& grobljeY + j >= 0 && grobljeY + j < mapH)
+					tileMap[grobljeX + i][grobljeY + j] = 6;
+		
 		for (int i = 0; i < mapW * mapH / 7; ++i) {
 			int x = Math.abs(rnd.nextInt()) % mapW;
 			int y = Math.abs(rnd.nextInt()) % mapH;
 			int tree = Math.abs(rnd.nextInt()) % 3;
-			tileMap[x][y] = 2 + tree;
+			tileMap[x][y] = 3 + tree;
+			
+//			if(3 + tree == 4)
+//				System.out.println("JESTEE");
 		}
 
+		
 		// startThread();
 	}
 
@@ -108,6 +124,24 @@ public class Background {
 		g.setColor(Color.yellow);
 		g.drawRect(selX * TILE_W - camX, selY * TILE_H - camY, TILE_W, TILE_H);
 
+	}
+	
+	public void drawTank(int x, int y, Graphics2D g){
+		
+//		System.out.println("Camx; x; Camx - x " + camX +" " + x + " " + (camX - x));
+		int poljeX = (x + camX) / TILE_W;
+		int poljeY = (y + camY) / TILE_H;
+		
+		if(tileMap[poljeX][poljeY] == 3)
+			tileMap[poljeX][poljeY] = 8;
+		
+		
+		g.setColor(Color.red);
+		g.drawRect(x, y, TILE_W, TILE_H);
+		
+//		return (x > selX * TILE_W - camX && x < (selX + 1) * TILE_W - camX &&
+//				y > selY * TILE_H - camY && y < (selY + 1) * TILE_H - camY);
+		
 	}
 
 	public void update(int mouseX, int mouseY, Tank tank) {
@@ -153,6 +187,23 @@ public class Background {
 		if (camXMovement != 0 || camYMovement != 0)
 			tank.move(camXMovement, camYMovement);
 
+	}
+
+	public boolean isTankAbleToMove(int x, int y) {
+		
+		
+		boolean bound = (x + camX > 0 && y + camY > 0
+				&& x + camX < TILE_W * mapW && y + camY < TILE_H * mapH);
+		
+
+		int poljeX = (x + camX) / TILE_W;
+		int poljeY = (y + camY) / TILE_H;
+		
+		boolean rock = (tileMap[poljeX][poljeY] != 4 && tileMap[poljeX][poljeY] != 6);
+		
+		
+		
+		return bound && rock;
 	}
 
 }
