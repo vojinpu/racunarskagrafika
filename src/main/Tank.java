@@ -10,6 +10,7 @@ import rafgfxlib.Util;
 public class Tank {
 	private float x,y;
 	private float startY,startX;
+
 	private BufferedImage tank;
 	private BufferedImage tank_with_parashute;
 	private BufferedImage tank_turret;
@@ -71,9 +72,9 @@ public class Tank {
 		tankTransform.translate(-tank.getWidth() / 2, -tank.getHeight() / 2);
 		
 		turretTransform.setTransform(tankTransform);
-		turretTransform.translate(tank.getWidth() / 3 *2, tank.getHeight() / 2);
+		turretTransform.translate(tank.getWidth() / 3 * 2, tank.getHeight() / 2);
 		turretTransform.rotate(turretAngle);
-		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
+		turretTransform.translate(-tank_turret.getWidth() / 3 * 2, -tank_turret.getHeight() / 2);
 	}
 	public BufferedImage getTankImage(){
 		if(startGame) return tank;
@@ -129,10 +130,17 @@ public class Tank {
 		turretTransform.rotate(turretAngle);
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 	}
-	public void moveForward(){
-		x += Math.cos(tankAngle) * tankMovementSpeed;
-		y += Math.sin(tankAngle) * tankMovementSpeed;
-			
+
+	public void moveForward(Background background){
+		
+		int x1 = (int) (x + Math.cos(tankAngle) * tankMovementSpeed);
+		int y1 = (int) (y + Math.sin(tankAngle) * tankMovementSpeed);
+		
+		if(background.isTankAbleToMove(x1, y1)){
+			x = x1;
+			y = y1;
+		}
+		
 		translateTank();
 	}
 	
@@ -142,9 +150,14 @@ public class Tank {
 	public double getTankAngle(){
 		return tankAngle;
 	}
-	public void moveBackward(){
-		x -= Math.cos(tankAngle) * tankMovementSpeed;
-		y -= Math.sin(tankAngle) * tankMovementSpeed;
+	public void moveBackward(Background background){
+		int x1 = (int) (x - Math.cos(tankAngle) * tankMovementSpeed);
+		int y1 = (int) (y - Math.sin(tankAngle) * tankMovementSpeed);
+		
+		if(background.isTankAbleToMove(x1, y1)){
+			x = x1;
+			y = y1;
+		}
 		
 		translateTank();
 	}

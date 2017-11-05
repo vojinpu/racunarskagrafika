@@ -76,6 +76,9 @@ public class Game extends GameFrame{
 		g.drawImage(tank.getTankTurretImage(),tank.getTurretTransform(),null);
 		bulletsList.drawBullets(g);
 		
+
+		background.drawTank((int)tank.getX(), (int)tank.getY(), g);
+		
 		
 	}
 
@@ -83,12 +86,16 @@ public class Game extends GameFrame{
 	public void update() {
 		background.update(getMouseX(), getMouseY(),tank);
 		
-		if(isKeyDown(KeyEvent.VK_UP) || isKeyDown(KeyEvent.VK_W))tank.moveForward();
-		if(isKeyDown(KeyEvent.VK_DOWN) || isKeyDown(KeyEvent.VK_S))tank.moveBackward();
+		if(isKeyDown(KeyEvent.VK_UP) || isKeyDown(KeyEvent.VK_W))tank.moveForward(background);
+		if(isKeyDown(KeyEvent.VK_DOWN) || isKeyDown(KeyEvent.VK_S))tank.moveBackward(background);
 		if(isKeyDown(KeyEvent.VK_RIGHT) || isKeyDown(KeyEvent.VK_D))tank.rotateTunkClocwise();
 		if(isKeyDown(KeyEvent.VK_LEFT) || isKeyDown(KeyEvent.VK_A))tank.rotateTunkAntiClocwise();
 		if(isKeyDown(KeyEvent.VK_SPACE) || isMouseButtonDown(GFMouseButton.Left))bulletsList.addBullet();
+		
 		bulletsList.moveBullets(width,height);
+		
 	}
+	
+
 
 }
