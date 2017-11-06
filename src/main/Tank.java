@@ -133,10 +133,10 @@ public class Tank {
 
 	public void moveForward(Background background){
 		
-		int x1 = (int) (x + Math.cos(tankAngle) * tankMovementSpeed);
-		int y1 = (int) (y + Math.sin(tankAngle) * tankMovementSpeed);
+		float x1 = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
+		float y1 = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
 		
-		if(background.isTankAbleToMove(x1, y1)){
+		if(background.isTankAbleToMove((int)x1,(int) y1)){
 			x = x1;
 			y = y1;
 		}
@@ -151,10 +151,10 @@ public class Tank {
 		return tankAngle;
 	}
 	public void moveBackward(Background background){
-		int x1 = (int) (x - Math.cos(tankAngle) * tankMovementSpeed);
-		int y1 = (int) (y - Math.sin(tankAngle) * tankMovementSpeed);
+		float x1 = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
+		float y1 = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
 		
-		if(background.isTankAbleToMove(x1, y1)){
+		if(background.isTankAbleToMove((int)x1,(int) y1)){
 			x = x1;
 			y = y1;
 		}
