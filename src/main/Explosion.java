@@ -50,7 +50,7 @@ public class Explosion {
 						x2 = (i + 1) * width;
 						y2 = (j + 1) * height;
 						try {
-							Thread.sleep(500);
+							Thread.sleep(75);
 						} catch (InterruptedException ex) {
 							Thread.currentThread().interrupt();
 						}
