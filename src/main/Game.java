@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Game extends GameFrame{
 	Tank tank;
 	BulletsList bulletsList;
 	Background background;
+	Explosions explosions;
 
 	public Game(String title, int sizeX, int sizeY) {
 		super(title, sizeX, sizeY);
@@ -21,6 +23,7 @@ public class Game extends GameFrame{
 		tank = new Tank(200, 200);
 		bulletsList = new BulletsList(tank);
 		background = new Background();
+		explosions = new Explosions();
 		startThread();
 	}
 
@@ -39,7 +42,7 @@ public class Game extends GameFrame{
 	@Override
 	public void handleMouseDown(int arg0, int arg1, GFMouseButton arg2) {
 		// TODO Auto-generated method stub
-		
+		explosions.addExplosion(300, 300);
 	}
 
 	@Override
@@ -65,7 +68,7 @@ public class Game extends GameFrame{
 		// TODO Auto-generated method stub
 		
 	}
-
+	boolean a = true;
 	@Override
 	public void render(Graphics2D g, int arg1, int arg2) {
 		// TODO Auto-generated method stub
@@ -75,10 +78,12 @@ public class Game extends GameFrame{
 		g.drawImage(tank.getTankImage(),tank.getTankTransform(),null);
 		g.drawImage(tank.getTankTurretImage(),tank.getTurretTransform(),null);
 		bulletsList.drawBullets(g);
+		explosions.drawExplosions(g);
 		
 
-		background.drawTank((int)tank.getX(), (int)tank.getY(), g);
-		
+	//	background.drawTank((int)tank.getX(), (int)tank.getY(), g);
+		g.setColor(Color.RED);
+		g.drawRect((int)(tank.getX() - tank.getTankImage().getWidth() / 2),(int) (tank.getY() - tank.getTankImage().getHeight() / 2), tank.getTankImage().getWidth(), tank.getTankImage().getHeight());
 		
 	}
 
