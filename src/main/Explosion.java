@@ -10,8 +10,8 @@ public class Explosion {
 
 	private BufferedImage image;
 
-	private static final int TILE_W = 8;
-	private static final int TILE_H = 6;
+	private static final int TILE_W = 9;
+	private static final int TILE_H = 9;
 
 	int x, y;
 
@@ -50,7 +50,7 @@ public class Explosion {
 						x2 = (i + 1) * width;
 						y2 = (j + 1) * height;
 						try {
-							Thread.sleep(5);
+							Thread.sleep(500);
 						} catch (InterruptedException ex) {
 							Thread.currentThread().interrupt();
 						}
