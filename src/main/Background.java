@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import Plamen.Fire;
 import rafgfxlib.GameFrame;
 import rafgfxlib.Util;
 import rafgfxlib.GameFrame.GFMouseButton;
@@ -28,9 +27,6 @@ public class Background {
 
 	static int windowHeight = 640;
 	static int windowWidth = 640;
-	
-
-	private Fire fire;
 
 	private class Tile {
 		public BufferedImage image = null;
@@ -56,8 +52,6 @@ public class Background {
 
 	public Background() {
 
-		fire = new Fire();
-		
 		for (int i = 0; i <= 16; ++i) {
 			tileset[i] = new Tile("tileset/svgset" + i + ".png", i);
 		}
@@ -82,7 +76,6 @@ public class Background {
 					tileMap[grobljeX + i][grobljeY + j] = 6;
 		
 		for (int i = 0; i < mapW * mapH / 7; ++i) {
-			
 			int x = Math.abs(rnd.nextInt()) % mapW;
 			int y = Math.abs(rnd.nextInt()) % mapH;
 			int tree = Math.abs(rnd.nextInt()) % 3;
@@ -91,8 +84,6 @@ public class Background {
 //			if(3 + tree == 4)
 //				System.out.println("JESTEE");
 		}
-		
-		tileMap[5][5] = 0;
 
 		
 		// startThread();
@@ -132,8 +123,7 @@ public class Background {
 
 		g.setColor(Color.yellow);
 		g.drawRect(selX * TILE_W - camX, selY * TILE_H - camY, TILE_W, TILE_H);
-		
-		fire.render(g, 5 * 64 - camX, 5 * 64 - camY);
+
 	}
 	
 	public void drawTank(int x, int y, Graphics2D g){
@@ -196,8 +186,6 @@ public class Background {
 		camYMovement -= camY;
 		if (camXMovement != 0 || camYMovement != 0)
 			tank.move(camXMovement, camYMovement);
-		
-		fire.update();
 
 	}
 
