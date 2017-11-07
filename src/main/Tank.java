@@ -136,15 +136,14 @@ public class Tank {
 
 	public void moveForward(Background background){
 		
-		float x1 = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
-		float y1 = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
-		
-		if(background.isTankAbleToMove((int)x1- tank.getWidth() /2,(int) y1- tank.getHeight() /2)){
-			x = x1;
-			y = y1;
-		}
-		
+		x = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
+		y = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
 		translateTank();
+		if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+			x = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
+			y = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
+			translateTank();
+		}
 	}
 	
 	public double getTurretAngle(){
@@ -154,15 +153,14 @@ public class Tank {
 		return tankAngle;
 	}
 	public void moveBackward(Background background){
-		float x1 = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
-		float y1 = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
-		
-		if(background.isTankAbleToMove((int)x1- tank.getWidth() /2,(int) y1- tank.getHeight() /2)){
-			x = x1;
-			y = y1;
-		}
-		
+		x = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
+		y = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
 		translateTank();
+		if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+			x = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
+			y = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
+			translateTank();
+		}
 	}
 	
 	public void move(double dX, double dY){
@@ -194,13 +192,21 @@ public class Tank {
 		setTurretRotation();
 	}
 	
-	public void rotateTunkClocwise(){
+	public void rotateTunkClocwise(Background background){
 		 tankAngle += tankRotateSpeed;
 		 translateTank();
+		 if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+			 tankAngle -= tankRotateSpeed;
+			 translateTank();
+		 }
 	}
-	public void rotateTunkAntiClocwise(){
+	public void rotateTunkAntiClocwise(Background background){
 		 tankAngle -= tankRotateSpeed;
 		 translateTank();
+		 if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+			 tankAngle += tankRotateSpeed;
+			 translateTank();
+		 }
 	}
 	public void recoileBack(double dX,double dY) {
 		new Thread(new Runnable() {

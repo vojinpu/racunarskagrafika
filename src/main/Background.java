@@ -3,6 +3,8 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -26,8 +28,8 @@ public class Background {
 	private int selX = 0;
 	private int selY = 0;
 
-	static int windowHeight = 640;
-	static int windowWidth = 640;
+	static int windowHeight = 800;
+	static int windowWidth = 1000;
 
 	private Fire fire;
 
@@ -130,7 +132,22 @@ public class Background {
 
 		fire.render(g, 5 * 64 - camX, 5 * 64 - camY);
 		
-		if(drawCoallision)g.drawRect(cX, cY, TILE_H, TILE_W);
+		if(drawCoallision)g.drawRect(cX - camX, cY - camY, TILE_H, TILE_W);
+		
+		   AffineTransform transform = Tank.instance.getTankTransform();
+		   Point2D point = new Point2D.Double();
+	       transform.transform(new Point2D.Double(0,0), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       transform.transform(new Point2D.Double(0,Tank.instance.getTankImage().getHeight()), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),0), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),Tank.instance.getTankImage().getHeight()), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       transform.transform(new Point2D.Double(0,Tank.instance.getTankImage().getHeight()/2), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),Tank.instance.getTankImage().getHeight()/2), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
 	}
 
 	public void drawTank(int x, int y, Graphics2D g) {
@@ -207,10 +224,10 @@ public class Background {
 					int x2 = j * TILE_W - camX;
 					int y2 = i * TILE_H - camY;
 					boolean coallision = MyUtil.checkCoallison(x1, y1, x2, y2, Tank.instance.getTankImage().getWidth(),
-							Tank.instance.getTankImage().getWidth(), TILE_W, TILE_H);
+							Tank.instance.getTankImage().getHeight(), TILE_W, TILE_H, Tank.instance.getTankTransform());
 					if (coallision) {
-						cX = x2;
-						cY = y2;
+						cX = x2 + camX;
+						cY = y2 + camY;
 						drawCoallision = true;
 						return false;
 					}
@@ -224,15 +241,9 @@ public class Background {
 
 	public boolean isTankAbleToMove(int x, int y) {
 
-		boolean bound = (x + camX > 0 && y + camY > 0 && x + camX + Tank.instance.getTankImage().getWidth() < TILE_W * mapW && y + Tank.instance.getTankImage().getHeight() + camY < TILE_H * mapH);
+		boolean bound = MyUtil.checkBound(-camX, -camY, TILE_W * mapW, TILE_H * mapH, Tank.instance.getTankTransform());
 
-		int poljeX = (x + camX) / TILE_W;
-		int poljeY = (y + camY) / TILE_H;
-
-		boolean rock = (tileMap[poljeX][poljeY] != 4 && tileMap[poljeX][poljeY] != 6);
-
-		check(x, y);
-		return bound && rock;
+		return check(x, y) && bound;
 	}
 
 }

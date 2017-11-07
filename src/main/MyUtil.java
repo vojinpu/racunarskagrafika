@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.security.cert.CertPathChecker;
@@ -277,10 +279,42 @@ public class MyUtil {
         return Util.rasterToImage(target);
 	}
 	
-	public static boolean checkCoallison(int x1, int y1, int x2, int y2, int width1, int width2, int height1, int heoght2){
-		if (x1 + width1 >= x2 && x1 <= x2 + width2 && y1 + height1 >= y2 && y1 <= y2 + heoght2) {
-	        return true;
+	public static boolean checkCoallison(int x1, int y1, int x2, int y2, int width1, int height1, int width2, int height2, AffineTransform transform){
+		double size = Math.sqrt(width1*width1+height1*height1);
+		x1 -= (size-width1)/2;
+		y1 -= (size-height1)/2;
+		if (x1 + size >= x2 && x1 <= x2 + width2 && y1 + size >= y2 && y1 <= y2 + height2) {
+	       Point2D point = new Point2D.Double();
+	       transform.transform(new Point2D.Double(0,0), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       transform.transform(new Point2D.Double(0,height1), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       transform.transform(new Point2D.Double(width1,0), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       transform.transform(new Point2D.Double(width1,height1), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       transform.transform(new Point2D.Double(0,height2/2), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       transform.transform(new Point2D.Double(width1,height1/2), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
 	        }
 	        return false;
+	}
+	
+	public static boolean checkBound(int x, int y,int width,int height, AffineTransform transform){
+	       Point2D point = new Point2D.Double();
+	       transform.transform(new Point2D.Double(0,0), point);
+	       if (point.getX() < x || point.getX() > x + width || point.getY() < y || point.getY() > y + height) return false;
+	       transform.transform(new Point2D.Double(0,Tank.instance.getTankImage().getHeight()), point);
+	       if (point.getX() < x || point.getX() > x + width || point.getY() < y || point.getY() > y + height) return false;
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),0), point);
+	       if (point.getX() < x || point.getX() > x + width || point.getY() < y || point.getY() > y + height) return false;
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),Tank.instance.getTankImage().getHeight()), point);
+	       if (point.getX() < x || point.getX() > x + width || point.getY() < y || point.getY() > y + height) return false;
+	       transform.transform(new Point2D.Double(0,Tank.instance.getTankImage().getHeight()/2), point);
+	       if (point.getX() < x || point.getX() > x + width || point.getY() < y || point.getY() > y + height) return false;
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),Tank.instance.getTankImage().getHeight()/2), point);
+	       if (point.getX() < x || point.getX() > x + width || point.getY() < y || point.getY() > y + height) return false;
+	       return true;
 	}
 }
