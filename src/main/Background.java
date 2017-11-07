@@ -90,7 +90,7 @@ public class Background {
 			// System.out.println("JESTEE");
 		}
 
-		tileMap[5][5] = 0;
+		tileMap[5][5] = 9;
 
 		// startThread();
 	}
