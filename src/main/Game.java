@@ -75,6 +75,7 @@ public class Game extends GameFrame{
 
 		background.render(g);
 		
+		
 		g.drawImage(tank.getTankImage(),tank.getTankTransform(),null);
 		g.drawImage(tank.getTankTurretImage(),tank.getTurretTransform(),null);
 		bulletsList.drawBullets(g);

@@ -2,6 +2,7 @@ package main;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.security.cert.CertPathChecker;
 
 import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
@@ -234,5 +235,52 @@ public class MyUtil {
 		color[3] = (int)(Util.lerpF(a[3], b[3], v));
 		
 		Util.clampRGBA(color);
+	}
+	public static BufferedImage rotateImage(BufferedImage image, double rotation){
+		WritableRaster source = image.getRaster();
+		int size = (int) Math.sqrt(source.getWidth()*source.getWidth()+source.getHeight()*source.getHeight());
+		WritableRaster target = Util.createRaster(size, size, source.getNumBands() == 4?true:false);
+		
+        int width  = source.getWidth();
+        int height = source.getHeight();
+
+        double angle = Math.toRadians(50);
+        double sin = Math.sin(angle);
+        double cos = Math.cos(angle);
+        double x0 =          		(size  - 1);     // point to rotate about
+        double y0 = 0.2 * (size - 1);     // center of image
+
+
+        int max = 0;
+        
+        // rotation
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                double a = x - x0;
+                double b = y - y0;
+                int xx = (int) (a * cos - b * sin + x0);
+                int yy = (int) (a * sin + b * cos + y0);
+                if(xx > max){
+                	max = xx;
+                	System.out.println(a+","+b+"," + xx);
+                }
+
+                // plot pixel (x, y) the same color as (xx, yy) if it's in bounds
+                if (xx >= 0 && xx < width && yy >= 0 && yy < height) {
+                	int[] rgba = new int[4];
+                	source.getPixel(xx, yy, rgba);
+                    target.setPixel(x , y , rgba);
+                }
+            }
+        }
+
+        return Util.rasterToImage(target);
+	}
+	
+	public static boolean checkCoallison(int x1, int y1, int x2, int y2, int width1, int width2, int height1, int heoght2){
+		if (x1 + width1 >= x2 && x1 <= x2 + width2 && y1 + height1 >= y2 && y1 <= y2 + heoght2) {
+	        return true;
+	        }
+	        return false;
 	}
 }

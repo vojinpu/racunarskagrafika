@@ -28,7 +28,6 @@ public class Background {
 
 	static int windowHeight = 640;
 	static int windowWidth = 640;
-	
 
 	private Fire fire;
 
@@ -57,44 +56,40 @@ public class Background {
 	public Background() {
 
 		fire = new Fire();
-		
+
 		for (int i = 0; i <= 16; ++i) {
 			tileset[i] = new Tile("tileset/svgset" + i + ".png", i);
 		}
 
-		
 		Random rnd = new Random();
 		for (int y = 0; y < mapH; ++y) {
 			for (int x = 0; x < mapW; ++x) {
 				tileMap[x][y] = Math.abs(rnd.nextInt()) % 3;
-//				tileMap[x][y] = 2;
+				// tileMap[x][y] = 2;
 			}
 		}
-
 
 		int grobljeX = Math.abs(rnd.nextInt()) % mapW;
 		int grobljeY = Math.abs(rnd.nextInt()) % mapH;
 
-		for(int i = -1; i < 2; i++)
-			for(int j = -1; j < 2; j++)
-				if(grobljeX + i >= 0 && grobljeX + i < mapW
-						&& grobljeY + j >= 0 && grobljeY + j < mapH)
+		for (int i = -1; i < 2; i++)
+			for (int j = -1; j < 2; j++)
+				if (grobljeX + i >= 0 && grobljeX + i < mapW && grobljeY + j >= 0 && grobljeY + j < mapH)
 					tileMap[grobljeX + i][grobljeY + j] = 6;
-		
+
 		for (int i = 0; i < mapW * mapH / 7; ++i) {
-			
+
 			int x = Math.abs(rnd.nextInt()) % mapW;
 			int y = Math.abs(rnd.nextInt()) % mapH;
 			int tree = Math.abs(rnd.nextInt()) % 3;
 			tileMap[x][y] = 3 + tree;
-			
-//			if(3 + tree == 4)
-//				System.out.println("JESTEE");
+
+			// if(3 + tree == 4)
+			// System.out.println("JESTEE");
 		}
-		
+
 		tileMap[5][5] = 0;
 
-		
 		// startThread();
 	}
 
@@ -132,26 +127,28 @@ public class Background {
 
 		g.setColor(Color.yellow);
 		g.drawRect(selX * TILE_W - camX, selY * TILE_H - camY, TILE_W, TILE_H);
-		
+
 		fire.render(g, 5 * 64 - camX, 5 * 64 - camY);
-	}
-	
-	public void drawTank(int x, int y, Graphics2D g){
 		
-//		System.out.println("Camx; x; Camx - x " + camX +" " + x + " " + (camX - x));
+		if(drawCoallision)g.drawRect(cX, cY, TILE_H, TILE_W);
+	}
+
+	public void drawTank(int x, int y, Graphics2D g) {
+
+		// System.out.println("Camx; x; Camx - x " + camX +" " + x + " " + (camX
+		// - x));
 		int poljeX = (x + camX) / TILE_W;
 		int poljeY = (y + camY) / TILE_H;
-		
-		if(tileMap[poljeX][poljeY] == 3)
+
+		if (tileMap[poljeX][poljeY] == 3)
 			tileMap[poljeX][poljeY] = 8;
-		
-		
+
 		g.setColor(Color.red);
 		g.drawRect(x, y, TILE_W, TILE_H);
-		
-//		return (x > selX * TILE_W - camX && x < (selX + 1) * TILE_W - camX &&
-//				y > selY * TILE_H - camY && y < (selY + 1) * TILE_H - camY);
-		
+
+		// return (x > selX * TILE_W - camX && x < (selX + 1) * TILE_W - camX &&
+		// y > selY * TILE_H - camY && y < (selY + 1) * TILE_H - camY);
+
 	}
 
 	public void update(int mouseX, int mouseY, Tank tank) {
@@ -196,25 +193,45 @@ public class Background {
 		camYMovement -= camY;
 		if (camXMovement != 0 || camYMovement != 0)
 			tank.move(camXMovement, camYMovement);
-		
+
 		fire.update();
 
 	}
 
+	int cX, cY;
+	boolean drawCoallision;
+	public boolean check(int x1, int y1) {
+		for (int i = 0; i < mapH; ++i) {
+			for (int j = 0; j < mapW; ++j) {
+				if (tileMap[j][i] == 4 || tileMap[j][i] == 6) {
+					int x2 = j * TILE_W - camX;
+					int y2 = i * TILE_H - camY;
+					boolean coallision = MyUtil.checkCoallison(x1, y1, x2, y2, Tank.instance.getTankImage().getWidth(),
+							Tank.instance.getTankImage().getWidth(), TILE_W, TILE_H);
+					if (coallision) {
+						cX = x2;
+						cY = y2;
+						drawCoallision = true;
+						return false;
+					}
+				}
+			}
+		}
+		drawCoallision = false;
+		return true;
+
+	}
+
 	public boolean isTankAbleToMove(int x, int y) {
-		
-		
-		boolean bound = (x + camX > 0 && y + camY > 0
-				&& x + camX < TILE_W * mapW && y + camY < TILE_H * mapH);
-		
+
+		boolean bound = (x + camX > 0 && y + camY > 0 && x + camX + Tank.instance.getTankImage().getWidth() < TILE_W * mapW && y + Tank.instance.getTankImage().getHeight() + camY < TILE_H * mapH);
 
 		int poljeX = (x + camX) / TILE_W;
 		int poljeY = (y + camY) / TILE_H;
-		
+
 		boolean rock = (tileMap[poljeX][poljeY] != 4 && tileMap[poljeX][poljeY] != 6);
-		
-		
-		
+
+		check(x, y);
 		return bound && rock;
 	}
 

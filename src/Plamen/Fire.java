@@ -37,6 +37,9 @@ public class Fire {
 			g.drawRect(x + iskre[i].getX(), y + 64 - iskre[i].getY(), 1, 1);
 		}
 		
+		//restore Graphics alpha to original state
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+		
 	}
 
 	public void update() {

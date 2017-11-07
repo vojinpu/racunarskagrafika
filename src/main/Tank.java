@@ -32,7 +32,10 @@ public class Tank {
 	private AffineTransform tankTransform = new AffineTransform();
 	private AffineTransform turretTransform = new AffineTransform();
 	
+	public static Tank instance;
+	
 	public Tank(int x,int y){
+		instance = this;
 		
 		//startParashuteAnimation();
 		this.x = x;
@@ -136,7 +139,7 @@ public class Tank {
 		float x1 = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
 		float y1 = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
 		
-		if(background.isTankAbleToMove((int)x1,(int) y1)){
+		if(background.isTankAbleToMove((int)x1- tank.getWidth() /2,(int) y1- tank.getHeight() /2)){
 			x = x1;
 			y = y1;
 		}
@@ -154,7 +157,7 @@ public class Tank {
 		float x1 = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
 		float y1 = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
 		
-		if(background.isTankAbleToMove((int)x1,(int) y1)){
+		if(background.isTankAbleToMove((int)x1- tank.getWidth() /2,(int) y1- tank.getHeight() /2)){
 			x = x1;
 			y = y1;
 		}
