@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -20,14 +21,21 @@ public class BulletsList {
 	}
 	public void drawBullets(Graphics2D g) {
 		for (Bullet bullet : bullets) {
-			g.drawImage(bullet.getBulletImage(), bullet.geTransform(), null);
+			g.drawImage(bullet.getBulletImage(), bullet.getTransform(), null);
+			Point2D point = new Point2D.Double();
+			bullet.getTransform().transform(new Point2D.Double(bullet.getBulletImage().getWidth(),bullet.getBulletImage().getHeight()/2), point);
+			g.fillRect((int)point.getX(), (int)point.getY(), 10, 10);
 		}
 	}
-	public void moveBullets(int width, int height) {
+	public void moveBullets(int width, int height, Background background, Explosions explosions) {
 		if(bullets.size()==0)return;
 		for(int i = bullets.size()-1;i >= 0;i--){
 			Bullet bullet = bullets.get(i);
 			bullet.moveBullet();
+			if (bullet.checkCoallison(background, explosions)){
+				bullets.remove(i);
+				continue;
+			}
 			if(bullet.getX() < -bullet.getBulletImage().getWidth() || bullet.getY() < -bullet.getBulletImage().getHeight() ||
 					bullet.getX() > width + bullet.getBulletImage().getWidth() || bullet.getY() > width + bullet.getBulletImage().getHeight()){
 				bullets.remove(i);

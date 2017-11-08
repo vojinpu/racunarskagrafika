@@ -15,6 +15,15 @@ public class Game extends GameFrame{
 	BulletsList bulletsList;
 	Background background;
 	Explosions explosions;
+	
+	public static GameStatus gameStatus;
+	
+	enum GameStatus{
+		INTRO,
+		RUNNING,
+		ANIMATION,
+		END
+	}
 
 	public Game(String title, int sizeX, int sizeY) {
 		super(title, sizeX, sizeY);
@@ -25,6 +34,7 @@ public class Game extends GameFrame{
 		background = new Background();
 		explosions = new Explosions();
 		startThread();
+		
 	}
 
 	@Override
@@ -42,7 +52,6 @@ public class Game extends GameFrame{
 	@Override
 	public void handleMouseDown(int arg0, int arg1, GFMouseButton arg2) {
 		// TODO Auto-generated method stub
-		explosions.addExplosion(300, 300);
 	}
 
 	@Override
@@ -80,6 +89,17 @@ public class Game extends GameFrame{
 		g.drawImage(tank.getTankTurretImage(),tank.getTurretTransform(),null);
 		bulletsList.drawBullets(g);
 		explosions.drawExplosions(g);
+		
+		
+		for (int i = 0; i < background.getMapH(); ++i) {
+			for (int j = 0; j < background.getMapW(); ++j) {
+				if (background.getTileMap()[j][i] == 5) {
+					int x2 = j * Background.getTileW() - background.getCamX();
+					int y2 = i * Background.getTileH() - background.getCamY();
+					g.fillRect(x2, y2, 10, 10);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -92,7 +112,7 @@ public class Game extends GameFrame{
 		if(isKeyDown(KeyEvent.VK_LEFT) || isKeyDown(KeyEvent.VK_A))tank.rotateTunkAntiClocwise(background);
 		if(isKeyDown(KeyEvent.VK_SPACE) || isMouseButtonDown(GFMouseButton.Left))bulletsList.addBullet();
 		
-		bulletsList.moveBullets(width,height);
+		bulletsList.moveBullets(width,height, background, explosions);
 		
 	}
 	

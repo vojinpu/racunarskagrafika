@@ -17,6 +17,6 @@ public class Explosions {
 		explosions.remove(explosion);
 	}
 	public void drawExplosions(Graphics2D g){
-		for(Explosion explosion : explosions)explosion.draw(g);
+		for(int i = 0;i < explosions.size();i++)explosions.get(i).draw(g);
 	}
 }

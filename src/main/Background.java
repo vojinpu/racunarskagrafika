@@ -32,6 +32,7 @@ public class Background {
 	static int windowWidth = 1000;
 
 	private Fire fire;
+	
 
 	private class Tile {
 		public BufferedImage image = null;
@@ -56,6 +57,7 @@ public class Background {
 	private int[][] tileMap = new int[mapW][mapH];
 
 	public Background() {
+		
 
 		fire = new Fire();
 
@@ -220,7 +222,7 @@ public class Background {
 	public boolean check(int x1, int y1) {
 		for (int i = 0; i < mapH; ++i) {
 			for (int j = 0; j < mapW; ++j) {
-				if (tileMap[j][i] == 4 || tileMap[j][i] == 6) {
+				if (tileMap[j][i] == 4 || tileMap[j][i] == 6 || tileMap[j][i] == 9) {
 					int x2 = j * TILE_W - camX;
 					int y2 = i * TILE_H - camY;
 					boolean coallision = MyUtil.checkCoallison(x1, y1, x2, y2, Tank.instance.getTankImage().getWidth(),
@@ -228,6 +230,10 @@ public class Background {
 					if (coallision) {
 						cX = x2 + camX;
 						cY = y2 + camY;
+						if(tileMap[j][i] == 9){
+							Tank.instance.startWaveAnimation();
+							return false;
+						}
 						drawCoallision = true;
 						return false;
 					}
@@ -238,12 +244,39 @@ public class Background {
 		return true;
 
 	}
-
 	public boolean isTankAbleToMove(int x, int y) {
-
 		boolean bound = MyUtil.checkBound(-camX, -camY, TILE_W * mapW, TILE_H * mapH, Tank.instance.getTankTransform());
-
 		return check(x, y) && bound;
 	}
+
+	public static int getTileW() {
+		return TILE_W;
+	}
+
+	public static int getTileH() {
+		return TILE_H;
+	}
+
+	public int getMapW() {
+		return mapW;
+	}
+
+	public int getMapH() {
+		return mapH;
+	}
+
+	public int getCamX() {
+		return camX;
+	}
+
+	public int getCamY() {
+		return camY;
+	}
+
+	public int[][] getTileMap() {
+		return tileMap;
+	}
+	
+	
 
 }

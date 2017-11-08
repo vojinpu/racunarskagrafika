@@ -24,15 +24,13 @@ public class Explosion {
 	public Explosion(Explosions explosions, int x, int y) {
 		instance = this;
 		image = Util.loadImage("tileset/explosion.png");
-		this.x = x;
-		this.y = y;
+		this.x = x + Background.instance.getCamX();
+		this.y = y + Background.instance.getCamY();
 		this.explosions = explosions;
 		startExplosionAnimation();
 	}
-
 	public void draw(Graphics2D g) {
-		g.drawImage(image, x, y, x + 64, y + 64, x1, y1, x2, y2, null);
-
+		g.drawImage(image, x - Background.instance.getCamX(), y - Background.instance.getCamY(), x + 64 - Background.instance.getCamX(), y + 64 - Background.instance.getCamY(), x1, y1, x2, y2, null);
 	}
 
 	public void startExplosionAnimation() {
@@ -42,15 +40,14 @@ public class Explosion {
 			public void run() {
 				int height = image.getHeight() / TILE_H;
 				int width = image.getWidth() / TILE_W;
-				System.out.println("Ekslozija");
-				for (int i = 0; i < TILE_W; i++) {
-					for (int j = 0; j < TILE_H; j++) {
+				for (int j = 0; j < TILE_H; j++) {
+					for (int i = 0; i < TILE_W; i++) {
 						x1 = i * width;
 						y1 = j * height;
 						x2 = (i + 1) * width;
 						y2 = (j + 1) * height;
 						try {
-							Thread.sleep(75);
+							Thread.sleep(10);
 						} catch (InterruptedException ex) {
 							Thread.currentThread().interrupt();
 						}

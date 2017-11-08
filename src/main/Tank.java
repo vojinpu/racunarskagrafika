@@ -28,6 +28,7 @@ public class Tank {
 	private double parashuteRotationAcceleration = -0.001;
 	
 	public boolean startGame = false;
+	public boolean animation = false;
 	
 	private AffineTransform tankTransform = new AffineTransform();
 	private AffineTransform turretTransform = new AffineTransform();
@@ -135,7 +136,6 @@ public class Tank {
 	}
 
 	public void moveForward(Background background){
-		
 		x = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
 		y = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
 		translateTank();
@@ -260,15 +260,14 @@ public class Tank {
 		}).start();
 	}
 	public void startWaveAnimation() {
+		if(animation)return;
+		animation = true;
 		new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				startY = y;
-				startX = x;
 				BufferedImage baseTank = Util.loadImage("/tank.png");
-				baseTank = MyUtil.scale(baseTank, 200, 150);
+				baseTank = MyUtil.scale(baseTank, 180, 130);
 				int k = 0;
 				while (y <startY + 400) {
 					k+=6;
@@ -285,7 +284,7 @@ public class Tank {
 					
 				}
 				setTankStartPos();
-				startGame = true;
+				animation = false;
 			}
 		}).start();
 	}

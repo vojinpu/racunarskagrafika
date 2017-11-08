@@ -164,7 +164,6 @@ public class MyUtil {
 	}
 	public static BufferedImage addWaves(BufferedImage image, int k) {
 		WritableRaster source = image.getRaster();
-		System.out.println(source.getNumBands());
 		WritableRaster target = Util.createRaster(image.getWidth()  , image.getHeight(), true);
 		
 		int rgb[] = new int[4];
