@@ -14,7 +14,7 @@ public class BulletsList {
 		this.tank = tank;
 	}
 	public void addBullet() {
-		if(System.currentTimeMillis() - lastBulletTime > 100) {
+		if(System.currentTimeMillis() - lastBulletTime > 150) {
 		bullets.add(new Bullet(tank));
 		lastBulletTime = System.currentTimeMillis();
 		}
