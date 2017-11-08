@@ -33,6 +33,7 @@ public class Background {
 
 	private Fire fire;
 	
+	public static Background instance;
 
 	private class Tile {
 		public BufferedImage image = null;
@@ -58,6 +59,7 @@ public class Background {
 
 	public Background() {
 		
+		instance = this;
 
 		fire = new Fire();
 
@@ -93,6 +95,7 @@ public class Background {
 		}
 
 		tileMap[5][5] = 9;
+		
 
 		// startThread();
 	}
