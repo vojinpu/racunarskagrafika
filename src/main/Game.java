@@ -29,12 +29,12 @@ public class Game extends GameFrame{
 		super(title, sizeX, sizeY);
 		// TODO Auto-generated constructor stub
 		width = sizeX;
-		tank = new Tank(200, 200);
+		tank = new Tank(500, 400);
 		bulletsList = new BulletsList(tank);
 		background = new Background();
 		explosions = new Explosions();
 		startThread();
-		
+		gameStatus = GameStatus.INTRO;
 	}
 
 	@Override
@@ -104,6 +104,9 @@ public class Game extends GameFrame{
 
 	@Override
 	public void update() {
+		if(gameStatus != GameStatus.RUNNING)return;
+		
+		
 		background.update(getMouseX(), getMouseY(),tank);
 		
 		if(isKeyDown(KeyEvent.VK_UP) || isKeyDown(KeyEvent.VK_W))tank.moveForward(background);

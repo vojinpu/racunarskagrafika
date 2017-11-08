@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 
+import main.Game.GameStatus;
 import rafgfxlib.Util;
 
 public class Tank {
@@ -26,9 +27,6 @@ public class Tank {
 	private double parashuteAngle;
 	private double parashuteRotationSpeed = 0.019;
 	private double parashuteRotationAcceleration = -0.001;
-	
-	public boolean startGame = false;
-	public boolean animation = false;
 	
 	private AffineTransform tankTransform = new AffineTransform();
 	private AffineTransform turretTransform = new AffineTransform();
@@ -54,8 +52,8 @@ public class Tank {
 	}
 	
 	public void setTankStartPos() {
-		y = startY;
-		x = startX;
+		y = startY - Background.instance.getCamY();
+		x = startX - Background.instance.getCamX();
 		
 		tank = Util.loadImage("/tank.png");
 		tank_turret = Util.loadImage("/tank_turret.png");
@@ -81,11 +79,11 @@ public class Tank {
 		turretTransform.translate(-tank_turret.getWidth() / 3 * 2, -tank_turret.getHeight() / 2);
 	}
 	public BufferedImage getTankImage(){
-		if(startGame) return tank;
+		if(Game.gameStatus == GameStatus.RUNNING || Game.gameStatus == GameStatus.ANIMATION) return tank;
 		else return tank_with_parashute;
 	}
 	public BufferedImage getTankTurretImage(){
-		return startGame==true?tank_turret:null;
+		return Game.gameStatus == GameStatus.RUNNING?tank_turret:null;
 	}
 	public AffineTransform getTankTransform(){
 		return tankTransform;
@@ -255,13 +253,14 @@ public class Tank {
 					
 				}
 				setTankStartPos();
-				startGame = true;
+				Game.gameStatus = GameStatus.RUNNING;
 			}
 		}).start();
 	}
 	public void startWaveAnimation() {
-		if(animation)return;
-		animation = true;
+		if(Game.gameStatus == GameStatus.ANIMATION)return;
+		Game.gameStatus = GameStatus.ANIMATION;
+		float startY = y;
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -271,7 +270,7 @@ public class Tank {
 				int k = 0;
 				while (y <startY + 400) {
 					k+=6;
-					y+=6;
+					y+=10;
 					tank = MyUtil.addWaves(baseTank, k);
 					tank_turret = MyUtil.addWaves(tank_turret, k);
 					translateTank();
@@ -284,7 +283,7 @@ public class Tank {
 					
 				}
 				setTankStartPos();
-				animation = false;
+				Game.gameStatus = GameStatus.RUNNING;
 			}
 		}).start();
 	}

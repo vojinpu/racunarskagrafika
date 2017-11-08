@@ -192,12 +192,12 @@ public class Background {
 		if (camX < -2 * TILE_W)
 			camX = -2 * TILE_W;
 
-		if (camX > (mapW - 7) * TILE_W)
-			camX = (mapW - 7) * TILE_W;
+		if (camX > (mapW - windowWidth / TILE_W + 2) * TILE_W)
+			camX = (mapW - windowWidth / TILE_W + 2) * TILE_W;
 		if (camY < -2 * TILE_H)
 			camY = -2 * TILE_H;
-		if (camY > (mapH - 7) * TILE_H)
-			camY = (mapH - 7) * TILE_H;
+		if (camY > (mapH  - windowHeight / TILE_H + 2) * TILE_H)
+			camY = (mapH  - windowHeight / TILE_H + 2) * TILE_H;
 
 		selX = (mouseX + camX) / TILE_W;
 		selY = (mouseY + camY) / TILE_H;
