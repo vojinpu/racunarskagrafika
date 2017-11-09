@@ -105,7 +105,6 @@ public class Intro {
 		}
 		
 		image = Util.rasterToImage(raster);
-		System.out.println("raster generated");
 	}
 	public BufferedImage getImage(){
 		return image;
