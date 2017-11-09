@@ -279,6 +279,14 @@ public class Background {
 	public int[][] getTileMap() {
 		return tileMap;
 	}
+
+	public void setCamX(int camX) {
+		this.camX = camX;
+	}
+
+	public void setCamY(int camY) {
+		this.camY = camY;
+	}
 	
 	
 

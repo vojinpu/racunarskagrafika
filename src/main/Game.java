@@ -15,6 +15,7 @@ public class Game extends GameFrame{
 	BulletsList bulletsList;
 	Background background;
 	Explosions explosions;
+	Intro intro;
 	
 	public static GameStatus gameStatus;
 	
@@ -28,13 +29,16 @@ public class Game extends GameFrame{
 	public Game(String title, int sizeX, int sizeY) {
 		super(title, sizeX, sizeY);
 		// TODO Auto-generated constructor stub
+		gameStatus = GameStatus.INTRO;
 		width = sizeX;
+		height = sizeY;
 		tank = new Tank(500, 400);
 		bulletsList = new BulletsList(tank);
 		background = new Background();
 		explosions = new Explosions();
+		intro = new Intro(this);
 		startThread();
-		gameStatus = GameStatus.INTRO;
+		tank.startParashuteAnimation();
 	}
 
 	@Override
@@ -81,9 +85,10 @@ public class Game extends GameFrame{
 	@Override
 	public void render(Graphics2D g, int arg1, int arg2) {
 		// TODO Auto-generated method stub
-
-		background.render(g);
 		
+		g.drawImage(intro.getImage(), 0, 0, null);
+		
+		background.render(g);
 		
 		g.drawImage(tank.getTankImage(),tank.getTankTransform(),null);
 		g.drawImage(tank.getTankTurretImage(),tank.getTurretTransform(),null);
@@ -118,7 +123,14 @@ public class Game extends GameFrame{
 		bulletsList.moveBullets(width,height, background, explosions);
 		
 	}
+
+	public int getWidth() {
+		return width;
+	}
+
+
+	public int getHeight() {
+		return height;
+	}
 	
-
-
 }

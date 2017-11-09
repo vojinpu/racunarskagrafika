@@ -35,8 +35,7 @@ public class Tank {
 	
 	public Tank(int x,int y){
 		instance = this;
-		
-		//startParashuteAnimation();
+
 		this.x = x;
 		this.y = -20;
 		startY = y;
@@ -48,7 +47,6 @@ public class Tank {
 		
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
-		startParashuteAnimation();
 	}
 	
 	public void setTankStartPos() {
@@ -225,11 +223,12 @@ public class Tank {
 	}
 	
 	public void moveParashute() {
-		y+=2;
+		y+= (1.0f / 10) * 7;
+		
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
 		parashuteRotationSpeed+=parashuteRotationAcceleration;
-		if(parashuteRotationSpeed< -0.02 || parashuteRotationSpeed > 0.02) {
+		if(parashuteRotationSpeed< -0.02 || parashuteRotationSpeed >= 0.02) {
 			parashuteRotationAcceleration*=-1;
 		}
 		parashuteAngle += parashuteRotationSpeed;
@@ -242,7 +241,7 @@ public class Tank {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				while (y <startY - 100) {
+				while (Background.instance.getCamY() < -300) {
 					moveParashute();
 				try {
 					Thread.sleep(20);
@@ -268,7 +267,7 @@ public class Tank {
 				BufferedImage baseTank = Util.loadImage("/tank.png");
 				baseTank = MyUtil.scale(baseTank, 180, 130);
 				int k = 0;
-				while (y <startY + 400) {
+				while (y <startY + 600) {
 					k+=6;
 					y+=10;
 					tank = MyUtil.addWaves(baseTank, k);
