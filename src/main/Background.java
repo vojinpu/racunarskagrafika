@@ -225,7 +225,7 @@ public class Background {
 	public boolean check(int x1, int y1) {
 		for (int i = 0; i < mapH; ++i) {
 			for (int j = 0; j < mapW; ++j) {
-				if (tileMap[j][i] == 4 || tileMap[j][i] == 6 || tileMap[j][i] == 9) {
+				if (tileMap[j][i] == 4 || tileMap[j][i] == 6 || tileMap[j][i] == 9|| tileMap[j][i] == 3) {
 					int x2 = j * TILE_W - camX;
 					int y2 = i * TILE_H - camY;
 					boolean coallision = MyUtil.checkCoallison(x1, y1, x2, y2, Tank.instance.getTankImage().getWidth(),
@@ -237,6 +237,13 @@ public class Background {
 							Tank.instance.startWaveAnimation();
 							return false;
 						}
+						
+						if(tileMap[j][i] == 3){
+							tileMap[j][i] = 8;
+							return false;
+						}
+						
+						
 						drawCoallision = true;
 						return false;
 					}
