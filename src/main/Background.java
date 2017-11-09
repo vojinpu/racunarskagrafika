@@ -57,7 +57,7 @@ public class Background {
 	private Tile[] tileset = new Tile[32];
 	private int[][] tileMap = new int[mapW][mapH];
 
-	public Background() {
+	public Background(Tank tank) {
 		
 		instance = this;
 
@@ -95,6 +95,12 @@ public class Background {
 		}
 
 		tileMap[5][5] = 9;
+		int startX = (tank.getStartX() + camX) / TILE_W;
+		int startY = (tank.getStartY() + camY) / TILE_H;
+		for (int i = -1; i <=  2; i++)
+			for (int j = -1; j <= 2; j++)
+				if (startX + i >= 0 && startX + i < mapW && startY + j >= 0 && startY + j < mapH)
+					tileMap[startX + i][startY + j] = 5;
 		
 
 		// startThread();

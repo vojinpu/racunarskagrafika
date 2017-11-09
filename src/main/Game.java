@@ -34,7 +34,7 @@ public class Game extends GameFrame{
 		height = sizeY;
 		tank = new Tank(500, 400);
 		bulletsList = new BulletsList(tank);
-		background = new Background();
+		background = new Background(tank);
 		explosions = new Explosions();
 		intro = new Intro(this);
 		startThread();

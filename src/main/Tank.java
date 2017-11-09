@@ -174,6 +174,17 @@ public class Tank {
 		return y;
 	}
 	
+	
+	public int getStartY() {
+		return (int) startY;
+	}
+
+
+	public int getStartX() {
+		return (int) startX;
+	}
+
+
 	private void translateTank(){
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
