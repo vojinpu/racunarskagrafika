@@ -3,6 +3,7 @@ package main;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import Plamen.Fire;
 import rafgfxlib.Util;
 
 public class Bullet {
@@ -76,6 +77,7 @@ public class Bullet {
 							Background.getTileW(), Background.getTileH(), transform);
 					if (coallision) {
 						explosions.addExplosion(x2, y2);
+						background.addFire(x2, y2);
 						background.getTileMap()[j][i] = 11;
 						background.decriseTargets();
 						return true;

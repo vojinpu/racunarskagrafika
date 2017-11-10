@@ -13,7 +13,12 @@ public class Fire {
 	private int iskreNum = 700;
 	private Iskra iskre [] = new Iskra[iskreNum];
 	
-	public Fire() {
+	private int x,y;
+	
+	public Fire(int x, int y) {
+		this.x = x;
+		this.y = y;
+		
 		r = new Random();
 		createIskre();
 	}
@@ -27,14 +32,14 @@ public class Fire {
 		
 	}
 
-	public void render(Graphics2D g, int x, int y) {
+	public void render(Graphics2D g, int camX, int camY) {
 
 
 		g.setColor(new Color(156 + r.nextInt(60), 42  + r.nextInt(10), 15  + r.nextInt(10)));
 
 		for(int i = 0; i < iskreNum; i++) {
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iskre[i].getAlpha()));
-			g.drawRect(x + iskre[i].getX(), y + 64 - iskre[i].getY(), 1, 1);
+			g.drawRect(x - camX + iskre[i].getX(), y - camY + 64 - iskre[i].getY(), 1, 1);
 		}
 		
 		//restore Graphics alpha to original state

@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
 import Plamen.Fire;
@@ -33,9 +34,10 @@ public class Background {
 	
 	private int counterTarget = 0;
 
-	private Fire fire;
 	
 	public static Background instance;
+	
+	private ArrayList<Fire> fires;
 
 	private class Tile {
 		public BufferedImage image = null;
@@ -62,8 +64,7 @@ public class Background {
 	public Background(Tank tank) {
 		
 		instance = this;
-
-		fire = new Fire();
+		fires = new ArrayList<>();
 
 		for (int i = 0; i <= 16; ++i) {
 			tileset[i] = new Tile("tileset/svgset" + i + ".png", i);
@@ -149,7 +150,8 @@ public class Background {
 		g.setColor(Color.yellow);
 		g.drawRect(selX * TILE_W - camX, selY * TILE_H - camY, TILE_W, TILE_H);
 
-		fire.render(g, 5 * 64 - camX, 5 * 64 - camY);
+		for(Fire f : fires)
+		f.render(g, camX, camY);
 		
 		if(drawCoallision)g.drawRect(cX - camX, cY - camY, TILE_H, TILE_W);
 		
@@ -223,7 +225,9 @@ public class Background {
 		if (camXMovement != 0 || camYMovement != 0)
 			tank.move(camXMovement, camYMovement);
 
-		fire.update();
+		
+		for(Fire f : fires)
+		f.update();
 
 	}
 
@@ -232,7 +236,7 @@ public class Background {
 	public boolean check(int x1, int y1) {
 		for (int i = 0; i < mapH; ++i) {
 			for (int j = 0; j < mapW; ++j) {
-				if (tileMap[j][i] == 4 || tileMap[j][i] == 6 || tileMap[j][i] == 9|| tileMap[j][i] == 3) {
+				if (tileMap[j][i] == 4 || tileMap[j][i] == 6 || tileMap[j][i] == 11|| tileMap[j][i] == 3) {
 					int x2 = j * TILE_W - camX;
 					int y2 = i * TILE_H - camY;
 					boolean coallision = MyUtil.checkCoallison(x1, y1, x2, y2, Tank.instance.getTankImage().getWidth(),
@@ -240,7 +244,7 @@ public class Background {
 					if (coallision) {
 						cX = x2 + camX;
 						cY = y2 + camY;
-						if(tileMap[j][i] == 9){
+						if(tileMap[j][i] == 11){
 							Tank.instance.startWaveAnimation();
 							return false;
 						}
@@ -310,6 +314,11 @@ public class Background {
 		--counterTarget;
 	}
 	
-	
+	public void addFire(float x, float y){
+		int poljeX = (int) ((x + camX) / TILE_W);
+		int poljeY = (int) ((y + camY) / TILE_H);
+		
+		fires.add(new Fire(poljeX * TILE_W, poljeY * TILE_H));
+	}
 
 }
