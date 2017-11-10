@@ -68,7 +68,7 @@ public class Bullet {
 	public boolean checkCoallison(Background background, Explosions explosions) {
 		for (int i = 0; i < background.getMapH(); ++i) {
 			for (int j = 0; j < background.getMapW(); ++j) {
-				if (background.getTileMap()[j][i] == 5) {
+				if (background.getTileMap()[j][i] == 10) {
 					int x2 = j * Background.getTileW() - background.getCamX();
 					int y2 = i * Background.getTileH() - background.getCamY();
 					boolean coallision = MyUtil.checkCoallison((int) x - Background.instance.getCamX(),
@@ -76,7 +76,8 @@ public class Bullet {
 							Background.getTileW(), Background.getTileH(), transform);
 					if (coallision) {
 						explosions.addExplosion(x2, y2);
-						background.getTileMap()[j][i] = 1;
+						background.getTileMap()[j][i] = 11;
+						background.decriseTargets();
 						return true;
 					}
 				}

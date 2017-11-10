@@ -30,6 +30,8 @@ public class Background {
 
 	static int windowHeight = 800;
 	static int windowWidth = 1000;
+	
+	private int counterTarget = 0;
 
 	private Fire fire;
 	
@@ -83,15 +85,18 @@ public class Background {
 				if (grobljeX + i >= 0 && grobljeX + i < mapW && grobljeY + j >= 0 && grobljeY + j < mapH)
 					tileMap[grobljeX + i][grobljeY + j] = 6;
 
+	
 		for (int i = 0; i < mapW * mapH / 7; ++i) {
 
 			int x = Math.abs(rnd.nextInt()) % mapW;
 			int y = Math.abs(rnd.nextInt()) % mapH;
-			int tree = Math.abs(rnd.nextInt()) % 3;
+			int tree = Math.abs(rnd.nextInt()) % 4;
 			tileMap[x][y] = 3 + tree;
+			if(tileMap[x][y] ==  6){
+				tileMap[x][y] = 10;
+				counterTarget++;
+			}
 
-			// if(3 + tree == 4)
-			// System.out.println("JESTEE");
 		}
 
 		tileMap[5][5] = 9;
@@ -99,11 +104,14 @@ public class Background {
 		int startY = (tank.getStartY() + camY) / TILE_H;
 		for (int i = -1; i <=  2; i++)
 			for (int j = -1; j <= 2; j++)
-				if (startX + i >= 0 && startX + i < mapW && startY + j >= 0 && startY + j < mapH)
+				if (startX + i >= 0 && startX + i < mapW && startY + j >= 0 && startY + j < mapH){
+					if(tileMap[startX + i][startY + j] ==  6)
+						counterTarget--;
 					tileMap[startX + i][startY + j] = 5;
+				}
 		
-
-		// startThread();
+		
+		
 	}
 
 	public void render(Graphics2D g) {
@@ -163,8 +171,6 @@ public class Background {
 
 	public void drawTank(int x, int y, Graphics2D g) {
 
-		// System.out.println("Camx; x; Camx - x " + camX +" " + x + " " + (camX
-		// - x));
 		int poljeX = (x + camX) / TILE_W;
 		int poljeY = (y + camY) / TILE_H;
 
@@ -174,16 +180,13 @@ public class Background {
 		g.setColor(Color.red);
 		g.drawRect(x, y, TILE_W, TILE_H);
 
-		// return (x > selX * TILE_W - camX && x < (selX + 1) * TILE_W - camX &&
-		// y > selY * TILE_H - camY && y < (selY + 1) * TILE_H - camY);
 
 	}
 
 	public void update(int mouseX, int mouseY, Tank tank) {
 		int camXMovement = camX;
 		int camYMovement = camY;
-		// System.out.println("getMouseX()" + " " + mouseX);
-		// System.out.println("getMouseY()" + " " + mouseY);
+
 		if (mouseX < windowWidth / 10)
 			camX -= 10;
 		if (mouseX > windowWidth / 10 * 9)
@@ -192,8 +195,6 @@ public class Background {
 			camY -= 10;
 		if (mouseY > windowHeight / 10 * 9)
 			camY += 10;
-
-		// System.out.println(camX + " " + (mapW - 7) * TILE_W);
 
 		if (camX < -2 * TILE_W)
 			camX = -2 * TILE_W;
@@ -292,6 +293,10 @@ public class Background {
 	public int[][] getTileMap() {
 		return tileMap;
 	}
+	
+	public void setTileMapDestroyed(int x, int y) {
+		tileMap[x][y] = 11;
+	}
 
 	public void setCamX(int camX) {
 		this.camX = camX;
@@ -299,6 +304,10 @@ public class Background {
 
 	public void setCamY(int camY) {
 		this.camY = camY;
+	}
+	
+	public void decriseTargets(){
+		--counterTarget;
 	}
 	
 	
