@@ -15,6 +15,12 @@ public class Fire {
 	
 	private int x,y;
 	
+	public Fire(){
+
+		r = new Random();
+		createIskre();
+	}
+	
 	public Fire(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -33,6 +39,21 @@ public class Fire {
 	}
 
 	public void render(Graphics2D g, int camX, int camY) {
+
+
+		g.setColor(new Color(156 + r.nextInt(60), 42  + r.nextInt(10), 15  + r.nextInt(10)));
+
+		for(int i = 0; i < iskreNum; i++) {
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, iskre[i].getAlpha()));
+			g.drawRect(x - camX + iskre[i].getX(), y - camY + 64 - iskre[i].getY(), 1, 1);
+		}
+		
+		//restore Graphics alpha to original state
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
+		
+	}
+	
+	public void render(Graphics2D g, int camX, int camY, int x, int y) {
 
 
 		g.setColor(new Color(156 + r.nextInt(60), 42  + r.nextInt(10), 15  + r.nextInt(10)));

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Plamen.Fire;
+import main.Game.GameStatus;
 import rafgfxlib.GameFrame;
 import rafgfxlib.Util;
 import rafgfxlib.GameFrame.GFMouseButton;
@@ -19,6 +20,8 @@ public class Background {
 
 	private static final int TILE_W = 64;
 	private static final int TILE_H = 64;
+	
+	private Patuljak patuljak;
 
 	private int mapW = 15;
 	private int mapH = 15;
@@ -29,8 +32,8 @@ public class Background {
 	private int selX = 0;
 	private int selY = 0;
 
-	static int windowHeight = 800;
-	static int windowWidth = 1000;
+	static int windowWidth = 900;
+	static int windowHeight = 690;
 	
 	private int counterTarget = 0;
 
@@ -92,10 +95,12 @@ public class Background {
 			int x = Math.abs(rnd.nextInt()) % mapW;
 			int y = Math.abs(rnd.nextInt()) % mapH;
 			int tree = Math.abs(rnd.nextInt()) % 4;
+			if(tileMap[x][y] !=  6){
 			tileMap[x][y] = 3 + tree;
 			if(tileMap[x][y] ==  6){
 				tileMap[x][y] = 10;
 				counterTarget++;
+			}
 			}
 
 		}
@@ -111,7 +116,8 @@ public class Background {
 					tileMap[startX + i][startY + j] = 5;
 				}
 		
-		
+
+		patuljak = new Patuljak();
 		
 	}
 
@@ -169,6 +175,8 @@ public class Background {
 	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
 	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),Tank.instance.getTankImage().getHeight()/2), point);
 	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       
+	       patuljak.draw(g, camX, camY);
 	}
 
 	public void drawTank(int x, int y, Graphics2D g) {
@@ -227,7 +235,9 @@ public class Background {
 
 		
 		for(Fire f : fires)
-		f.update();
+			f.update();
+		
+		patuljak.update();
 
 	}
 
@@ -298,6 +308,10 @@ public class Background {
 		return tileMap;
 	}
 	
+	public int getTileField(int poljeX, int poljeY) {
+		return tileMap[poljeX][poljeY]; 
+	}
+	
 	public void setTileMapDestroyed(int x, int y) {
 		tileMap[x][y] = 11;
 	}
@@ -312,6 +326,13 @@ public class Background {
 	
 	public void decriseTargets(){
 		--counterTarget;
+		System.out.println("targets " + counterTarget);
+		if(counterTarget==0){
+			System.out.println("here i am");
+		Game.instance.endScene.napraviKockice();
+		Game.instance.endScene.pokreniPomeranje();
+		Game.gameStatus = GameStatus.END;
+		}
 	}
 	
 	public void addFire(float x, float y){

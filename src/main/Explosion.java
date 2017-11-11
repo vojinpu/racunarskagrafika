@@ -13,12 +13,12 @@ public class Explosion {
 	private static final int TILE_W = 9;
 	private static final int TILE_H = 9;
 
-	int x, y;
+	private int x, y;
 
-	int x1, y1;
-	int x2, y2;
+	private int x1, y1;
+	private int x2, y2;
 
-	Explosions explosions;
+	private Explosions explosions;
 	private Explosion instance;
 
 	public Explosion(Explosions explosions, int x, int y) {
