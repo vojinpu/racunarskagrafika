@@ -16,6 +16,8 @@ public class Game extends GameFrame{
 	Background background;
 	Explosions explosions;
 	Intro intro;
+	EndScene endScene;
+	public static Game instance;
 	
 	public static GameStatus gameStatus;
 	
@@ -29,6 +31,7 @@ public class Game extends GameFrame{
 	public Game(String title, int sizeX, int sizeY) {
 		super(title, sizeX, sizeY);
 		// TODO Auto-generated constructor stub
+		instance = this;
 		gameStatus = GameStatus.INTRO;
 		width = sizeX;
 		height = sizeY;
@@ -36,6 +39,7 @@ public class Game extends GameFrame{
 		bulletsList = new BulletsList(tank);
 		background = new Background(tank);
 		explosions = new Explosions();
+		endScene = new EndScene(this);
 		intro = new Intro(this);
 		startThread();
 		tank.startParashuteAnimation();
@@ -104,6 +108,10 @@ public class Game extends GameFrame{
 					g.fillRect(x2, y2, 10, 10);
 				}
 			}
+		}
+		
+		if(gameStatus == GameStatus.END){
+			endScene.crtanje(g);
 		}
 	}
 

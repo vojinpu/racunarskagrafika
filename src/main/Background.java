@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import Plamen.Fire;
+import main.Game.GameStatus;
 import rafgfxlib.GameFrame;
 import rafgfxlib.Util;
 import rafgfxlib.GameFrame.GFMouseButton;
@@ -29,8 +30,8 @@ public class Background {
 	private int selX = 0;
 	private int selY = 0;
 
-	static int windowHeight = 800;
-	static int windowWidth = 1000;
+	static int windowWidth = 900;
+	static int windowHeight = 690;
 	
 	private int counterTarget = 0;
 
@@ -312,6 +313,13 @@ public class Background {
 	
 	public void decriseTargets(){
 		--counterTarget;
+		System.out.println("targets " + counterTarget);
+		if(counterTarget==0){
+			System.out.println("here i am");
+		Game.instance.endScene.napraviKockice();
+		Game.instance.endScene.pokreniPomeranje();
+		Game.gameStatus = GameStatus.END;
+		}
 	}
 	
 	public void addFire(float x, float y){
