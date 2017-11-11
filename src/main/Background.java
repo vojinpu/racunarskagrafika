@@ -299,6 +299,7 @@ public class Background {
 	public int getCamX() {
 		return camX;
 	}
+	
 
 	public int getCamY() {
 		return camY;

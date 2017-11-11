@@ -11,8 +11,8 @@ import rafgfxlib.Util;
 public class Tank {
 	private float x,y;
 	private float startY,startX;
-
-	private BufferedImage tank;
+	
+	private BufferedImage tankImg;
 	private BufferedImage tank_with_parashute;
 	private BufferedImage tank_turret;
 	private double turretAngle;
@@ -53,10 +53,10 @@ public class Tank {
 		y = startY - Background.instance.getCamY();
 		x = startX - Background.instance.getCamX();
 		
-		tank = Util.loadImage("/tank.png");
+		tankImg = Util.loadImage("/tank.png");
 		tank_turret = Util.loadImage("/tank_turret.png");
 		
-		tank = MyUtil.scaleSameProportion(tank, 0.5f);
+		tankImg = MyUtil.scaleSameProportion(tankImg, 0.5f);
 		tank_turret = MyUtil.scaleSameProportion(tank_turret, 0.5f);
 		
 		moveX = 2;
@@ -69,15 +69,15 @@ public class Tank {
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
 		tankTransform.rotate(tankAngle + Math.PI);
-		tankTransform.translate(-tank.getWidth() / 2, -tank.getHeight() / 2);
+		tankTransform.translate(-tankImg.getWidth() / 2, -tankImg.getHeight() / 2);
 		
 		turretTransform.setTransform(tankTransform);
-		turretTransform.translate(tank.getWidth() / 3 * 2, tank.getHeight() / 2);
+		turretTransform.translate(tankImg.getWidth() / 3 * 2, tankImg.getHeight() / 2);
 		turretTransform.rotate(turretAngle);
 		turretTransform.translate(-tank_turret.getWidth() / 3 * 2, -tank_turret.getHeight() / 2);
 	}
 	public BufferedImage getTankImage(){
-		if(Game.gameStatus == GameStatus.RUNNING || Game.gameStatus == GameStatus.ANIMATION) return tank;
+		if(Game.gameStatus == GameStatus.RUNNING || Game.gameStatus == GameStatus.ANIMATION) return tankImg;
 		else return tank_with_parashute;
 	}
 	public BufferedImage getTankTurretImage(){
@@ -107,7 +107,7 @@ public class Tank {
 		turretAngle = absAngle - tankAngle;
 		
 		turretTransform.setTransform(tankTransform);
-		turretTransform.translate(tank.getWidth() / 3 *2, tank.getHeight() / 2);
+		turretTransform.translate(tankImg.getWidth() / 3 *2, tankImg.getHeight() / 2);
 		turretTransform.rotate(turretAngle);
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 	}
@@ -123,10 +123,10 @@ public class Tank {
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
 		tankTransform.rotate(tankAngle + Math.PI);
-		tankTransform.translate(-tank.getWidth() / 2, -tank.getHeight() / 2);
+		tankTransform.translate(-tankImg.getWidth() / 2, -tankImg.getHeight() / 2);
 		
 		turretTransform.setTransform(tankTransform);
-		turretTransform.translate(tank.getWidth() / 3 *2, tank.getHeight() / 2);
+		turretTransform.translate(tankImg.getWidth() / 3 *2, tankImg.getHeight() / 2);
 		turretTransform.rotate(turretAngle);
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 	}
@@ -135,7 +135,7 @@ public class Tank {
 		x = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
 		y = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
 		translateTank();
-		if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+		if(!background.isTankAbleToMove((int)x- tankImg.getWidth() /2,(int) y- tankImg.getHeight() /2)){
 			x = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
 			y = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
 			translateTank();
@@ -152,7 +152,7 @@ public class Tank {
 		x = (float) (x - Math.cos(tankAngle) * tankMovementSpeed);
 		y = (float) (y - Math.sin(tankAngle) * tankMovementSpeed);
 		translateTank();
-		if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+		if(!background.isTankAbleToMove((int)x- tankImg.getWidth() /2,(int) y- tankImg.getHeight() /2)){
 			x = (float) (x + Math.cos(tankAngle) * tankMovementSpeed);
 			y = (float) (y + Math.sin(tankAngle) * tankMovementSpeed);
 			translateTank();
@@ -162,16 +162,16 @@ public class Tank {
 	public void move(double dX, double dY){
 		x += dX;
 		y += dY;
-		if(tank==null || tank_turret == null)return;
+		if(tankImg==null || tank_turret == null)return;
 		translateTank();
 	}
 	
 	public float getX(){
-		return x;
+		return x + Background.instance.getCamX();
 	}
 	
 	public float getY(){
-		return y;
+		return y + Background.instance.getCamY();
 	}
 	
 	
@@ -189,10 +189,10 @@ public class Tank {
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
 		tankTransform.rotate(tankAngle + Math.PI);
-		tankTransform.translate(-tank.getWidth() / 2, -tank.getHeight() / 2);
+		tankTransform.translate(-tankImg.getWidth() / 2, -tankImg.getHeight() / 2);
 		
 		turretTransform.setTransform(tankTransform);
-		turretTransform.translate(tank.getWidth() / 3 *2, tank.getHeight() / 2);
+		turretTransform.translate(tankImg.getWidth() / 3 *2, tankImg.getHeight() / 2);
 		turretTransform.rotate(turretAngle);
 		turretTransform.translate(-tank_turret.getWidth() / 3 *2, -tank_turret.getHeight() / 2);
 		
@@ -202,7 +202,7 @@ public class Tank {
 	public void rotateTunkClocwise(Background background){
 		 tankAngle += tankRotateSpeed;
 		 translateTank();
-		 if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+		 if(!background.isTankAbleToMove((int)x- tankImg.getWidth() /2,(int) y- tankImg.getHeight() /2)){
 			 tankAngle -= tankRotateSpeed;
 			 translateTank();
 		 }
@@ -210,7 +210,7 @@ public class Tank {
 	public void rotateTunkAntiClocwise(Background background){
 		 tankAngle -= tankRotateSpeed;
 		 translateTank();
-		 if(!background.isTankAbleToMove((int)x- tank.getWidth() /2,(int) y- tank.getHeight() /2)){
+		 if(!background.isTankAbleToMove((int)x- tankImg.getWidth() /2,(int) y- tankImg.getHeight() /2)){
 			 tankAngle += tankRotateSpeed;
 			 translateTank();
 		 }
@@ -281,7 +281,7 @@ public class Tank {
 				while (y <startY + 600) {
 					k+=6;
 					y+=10;
-					tank = MyUtil.addWaves(baseTank, k);
+					tankImg = MyUtil.addWaves(baseTank, k);
 					tank_turret = MyUtil.addWaves(tank_turret, k);
 					translateTank();
 				try {
