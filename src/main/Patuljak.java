@@ -32,6 +32,8 @@ public class Patuljak {
 	private int deadCounter = 300;
 	private float alpha = 1.00f;
 	
+	private boolean deadPhoto = true;
+	
 	public Patuljak() {
 		frame = 0;
 		image = Util.loadImage("character.png");
@@ -73,12 +75,20 @@ public class Patuljak {
 			fireB = true;
 			System.out.println("VAATRA");
 		}
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+		
+		if(deadCounter < 300){
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+			
+			g.drawImage(image, x - Background.instance.getCamX(), y - Background.instance.getCamY(),
+					image.getWidth(), image.getHeight(), null);
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.00f));
+			
+		}
+		else
 		g.drawImage(image, x - Background.instance.getCamX(), y - Background.instance.getCamY(),
 				x + imageW - Background.instance.getCamX(), y + imageH - Background.instance.getCamY(), frame * imageW,
 				row * imageH, (frame + 1) * imageW, (row + 1) * imageH, null);
 
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.00f));
 		
 		
 		if (fireB)
@@ -94,13 +104,11 @@ public class Patuljak {
 			if(deadCounter >= 0){
 			
 				image = Util.loadImage("deadbody.png");
-				System.out.println("Slika je : " + (image == null));
 				deadCounter--;
-				
 				
 				if(deadCounter % 3 == 0)
 					alpha -= 0.01;
-				System.out.println("Alpha: "+ alpha);
+				
 				alpha = Math.max(alpha, 0);
 			}
 			
