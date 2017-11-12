@@ -1,8 +1,11 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
 
 import Plamen.Fire;
 import rafgfxlib.Util;
@@ -10,7 +13,7 @@ import rafgfxlib.Util;
 public class Patuljak {
 
 	private BufferedImage image;
-	private static final int TILE_W = 10;
+	private static final int TILE_W = 8;
 	private static final int TILE_H = 4;
 
 	private int imageW, imageH;
@@ -25,7 +28,10 @@ public class Patuljak {
 
 	private Fire fire;
 	private boolean fireB;
-
+	
+	private int deadCounter = 300;
+	private float alpha = 1.00f;
+	
 	public Patuljak() {
 		frame = 0;
 		image = Util.loadImage("character.png");
@@ -47,15 +53,17 @@ public class Patuljak {
 	public void draw(Graphics2D g, int camX, int camY) {
 
 		int row = 0;
-		if (speedY > 0)
-			row = 0;
-		if (speedX < 0)
-			row = 1;
-		if (speedY < 0)
-			row = 2;
-		if (speedX > 0)
-			row = 3;
+		
 
+		if (speedX < 0)
+			row = 0;
+		if (speedX > 0)
+			row = 1;
+		if (speedY > 0)
+			row = 2;
+		if (speedY > 0)
+			row = 3;
+		
 		int poljeX = (x) / 64;
 		int poljeY = (y) / 64;
 
@@ -65,11 +73,14 @@ public class Patuljak {
 			fireB = true;
 			System.out.println("VAATRA");
 		}
-
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 		g.drawImage(image, x - Background.instance.getCamX(), y - Background.instance.getCamY(),
 				x + imageW - Background.instance.getCamX(), y + imageH - Background.instance.getCamY(), frame * imageW,
 				row * imageH, (frame + 1) * imageW, (row + 1) * imageH, null);
 
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.00f));
+		
+		
 		if (fireB)
 			fire.render(g, camX, camY, x, y);
 
@@ -79,7 +90,28 @@ public class Patuljak {
 
 		if(dead){
 			
-			image = Util.loadImage("tileset/svgset6.png");
+			
+			if(deadCounter >= 0){
+			
+				image = Util.loadImage("deadbody.png");
+				System.out.println("Slika je : " + (image == null));
+				deadCounter--;
+				
+				
+				if(deadCounter % 3 == 0)
+					alpha -= 0.01;
+				System.out.println("Alpha: "+ alpha);
+				alpha = Math.max(alpha, 0);
+			}
+			
+			else {
+				
+				alpha = 1.00f;
+				image = Util.loadImage("tileset/svgset6.png");
+				
+				
+			}
+			
 			
 		}
 		
@@ -112,12 +144,12 @@ public class Patuljak {
 			if (r.nextInt() % 2 == 0) {
 
 				speedX = 0;
-//				speedY = (r.nextInt(10) - 5) * 3;
+				speedY = (r.nextInt(10) - 5) * 3;
 
 			} else {
 
 				speedY = 0;
-//				speedX = (r.nextInt(10) - 5) * 3;
+				speedX = (r.nextInt(10) - 5) * 3;
 
 			}
 
