@@ -161,6 +161,7 @@ public class Background {
 		
 		if(drawCoallision)g.drawRect(cX - camX, cY - camY, TILE_H, TILE_W);
 		
+		/*
 		   AffineTransform transform = Tank.instance.getTankTransform();
 		   Point2D point = new Point2D.Double();
 	       transform.transform(new Point2D.Double(0,0), point);
@@ -175,22 +176,12 @@ public class Background {
 	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
 	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth(),Tank.instance.getTankImage().getHeight()/2), point);
 	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
-	       
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth()/2,0), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	       transform.transform(new Point2D.Double(Tank.instance.getTankImage().getWidth()/2,Tank.instance.getTankImage().getHeight()), point);
+	       g.drawRect((int)point.getX(),(int) point.getY(), 10, 10);
+	      */ 
 	       patuljak.draw(g, camX, camY);
-	}
-
-	public void drawTank(int x, int y, Graphics2D g) {
-
-		int poljeX = (x + camX) / TILE_W;
-		int poljeY = (y + camY) / TILE_H;
-
-		if (tileMap[poljeX][poljeY] == 3)
-			tileMap[poljeX][poljeY] = 8;
-
-		g.setColor(Color.red);
-		g.drawRect(x, y, TILE_W, TILE_H);
-
-
 	}
 
 	public void update(int mouseX, int mouseY, Tank tank) {
@@ -230,9 +221,10 @@ public class Background {
 
 		camXMovement -= camX;
 		camYMovement -= camY;
-		if (camXMovement != 0 || camYMovement != 0)
+		if (camXMovement != 0 || camYMovement != 0) {
 			tank.move(camXMovement, camYMovement);
-
+			Game.instance.rain.moveRain(camXMovement, camYMovement);
+		}
 		
 		for(Fire f : fires)
 			f.update();
@@ -249,7 +241,7 @@ public class Background {
 				if (tileMap[j][i] == 4 || tileMap[j][i] == 6 || tileMap[j][i] == 11|| tileMap[j][i] == 3) {
 					int x2 = j * TILE_W - camX;
 					int y2 = i * TILE_H - camY;
-					boolean coallision = MyUtil.checkCoallison(x1, y1, x2, y2, Tank.instance.getTankImage().getWidth(),
+					boolean coallision = MyUtil.checkCoallison( x2, y2, Tank.instance.getTankImage().getWidth(),
 							Tank.instance.getTankImage().getHeight(), TILE_W, TILE_H, Tank.instance.getTankTransform());
 					if (coallision) {
 						cX = x2 + camX;
@@ -329,7 +321,6 @@ public class Background {
 		--counterTarget;
 		System.out.println("targets " + counterTarget);
 		if(counterTarget==0){
-			System.out.println("here i am");
 		Game.instance.endScene.napraviKockice();
 		Game.instance.endScene.pokreniPomeranje();
 		Game.gameStatus = GameStatus.END;

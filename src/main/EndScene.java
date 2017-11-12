@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import main.Game.GameStatus;
 import rafgfxlib.Util;
 
 public class EndScene {
@@ -41,16 +42,7 @@ public class EndScene {
 		
 		for(int i=0;i<kvadratici.size();i++) {
 			Kvadrat kvadrat=kvadratici.get(i);
-			//System.out.println("kvadrat " + i + " " + kvadrat.x + " " + kvadrat.y);
 			g.drawImage(kvadrat.slika, kvadrat.x, kvadrat.y, null);
-		}
-	
-		if(pomerajuce_kockice != null && pomerajuce_kockice.size()>0){
-			for(int i=0;i<pomerajuce_kockice.size();i++) {
-				Kvadrat kvadrat=pomerajuce_kockice.get(i);
-				//System.out.println("kvadrat " + i + " " + kvadrat.x + " " + kvadrat.y);
-				g.drawImage(kvadrat.slika, kvadrat.x, kvadrat.y, null);
-			}
 		}
 		
 	}
@@ -165,6 +157,7 @@ public class EndScene {
 				}
 				System.out.println("kraj");
 				//pokreni ponovo igru
+				game.initialize();
 			}
 		}).start();
 	}

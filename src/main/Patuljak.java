@@ -1,7 +1,10 @@
 package main;
 
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -68,14 +71,13 @@ public class Patuljak {
 		if (speedY > 0)
 			row = 3;
 		
-		int poljeX = (x) / 64;
-		int poljeY = (y) / 64;
+		int poljeX = (x + imageW/2) / 64;
+		int poljeY = (y + imageH/2) / 64;
 
 
 		if (poljeX > 0 && poljeY > 0 && poljeX < 16 && poljeY < 16
 				&& Background.instance.getTileField(poljeX, poljeY) == 11) {
 			fireB = true;
-			System.out.println("VAATRA");
 		}
 		
 		if(deadCounter < 300){
@@ -134,13 +136,8 @@ public class Patuljak {
 		
 		
 		else{
-
-			System.out.println("X: " + (int) Tank.instance.getX()+ " " + x);
-			System.out.println("Y: " + (int) Tank.instance.getY()+ " " + y);
-			System.out.println();
 		boolean coallision = MyUtil.checkCoallison(
-				(int) Tank.instance.getX(), (int) Tank.instance.getY(),
-				x, y,
+				x - Background.instance.getCamX(), y - Background.instance.getCamY(),
 				Tank.instance.getTankImage().getWidth(), Tank.instance.getTankImage().getHeight(),
 				imageW, imageH, Tank.instance.getTankTransform());
 		

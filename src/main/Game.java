@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import org.omg.CORBA.INITIALIZE;
+
 import rafgfxlib.GameFrame;
 
 public class Game extends GameFrame{
@@ -17,6 +19,7 @@ public class Game extends GameFrame{
 	Explosions explosions;
 	Intro intro;
 	EndScene endScene;
+	Rain rain;
 	public static Game instance;
 	
 	public static GameStatus gameStatus;
@@ -32,16 +35,20 @@ public class Game extends GameFrame{
 		super(title, sizeX, sizeY);
 		// TODO Auto-generated constructor stub
 		instance = this;
-		gameStatus = GameStatus.INTRO;
 		width = sizeX;
 		height = sizeY;
+		initialize();
+		startThread();
+	}
+	public void initialize() {
+		gameStatus = GameStatus.INTRO;
 		tank = new Tank(500, 400);
 		bulletsList = new BulletsList(tank);
 		background = new Background(tank);
 		explosions = new Explosions();
 		endScene = new EndScene(this);
 		intro = new Intro(this);
-		startThread();
+		rain = new Rain(width, height);
 		tank.startParashuteAnimation();
 	}
 
@@ -89,7 +96,7 @@ public class Game extends GameFrame{
 	@Override
 	public void render(Graphics2D g, int arg1, int arg2) {
 		// TODO Auto-generated method stub
-		
+		if(gameStatus != GameStatus.END) {
 		g.drawImage(intro.getImage(), 0, 0, null);
 		
 		background.render(g);
@@ -98,18 +105,8 @@ public class Game extends GameFrame{
 		g.drawImage(tank.getTankTurretImage(),tank.getTurretTransform(),null);
 		bulletsList.drawBullets(g);
 		explosions.drawExplosions(g);
-		
-		
-		for (int i = 0; i < background.getMapH(); ++i) {
-			for (int j = 0; j < background.getMapW(); ++j) {
-				if (background.getTileMap()[j][i] == 5) {
-					int x2 = j * Background.getTileW() - background.getCamX();
-					int y2 = i * Background.getTileH() - background.getCamY();
-					g.fillRect(x2, y2, 10, 10);
-				}
-			}
+		rain.drawRain(g);
 		}
-		
 		if(gameStatus == GameStatus.END){
 			endScene.crtanje(g);
 		}
@@ -117,7 +114,10 @@ public class Game extends GameFrame{
 
 	@Override
 	public void update() {
-		if(gameStatus != GameStatus.RUNNING)return;
+		if(gameStatus != GameStatus.RUNNING) {
+			bulletsList.removeBullets();
+			return;
+		}
 		
 		
 		background.update(getMouseX(), getMouseY(),tank);

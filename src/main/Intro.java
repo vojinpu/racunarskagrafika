@@ -118,7 +118,6 @@ public class Intro {
 					if(k < 1000)k+=5;
 					moveStars(10);
 					Background.instance.setCamY(Background.instance.getCamY()+10);
-					Tank.instance.move(0, 1);
 					generateRaster();
 					try {
 						Thread.sleep(10);

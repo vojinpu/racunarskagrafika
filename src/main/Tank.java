@@ -90,7 +90,7 @@ public class Tank {
 		return turretTransform;
 	}
 	public void rotateTurret(int mouseX,int mouseY){
-		if(tank_turret==null)return;
+		if(tank_turret==null && Game.gameStatus != GameStatus.RUNNING)return;
 		
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
@@ -234,7 +234,7 @@ public class Tank {
 	}
 	
 	public void moveParashute() {
-		y+= (1.0f / 10) * 7;
+		y+= (1.0f / 10) * 8;
 		
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
@@ -252,7 +252,7 @@ public class Tank {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				while (Background.instance.getCamY() < -300) {
+				while (Background.instance.getCamY() < -100) {
 					moveParashute();
 				try {
 					Thread.sleep(20);

@@ -19,6 +19,9 @@ public class BulletsList {
 		lastBulletTime = System.currentTimeMillis();
 		}
 	}
+	public void removeBullets() {
+		bullets = new ArrayList<>();
+	}
 	public void drawBullets(Graphics2D g) {
 		for (Bullet bullet : bullets) {
 			g.drawImage(bullet.getBulletImage(), bullet.getTransform(), null);

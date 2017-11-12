@@ -278,11 +278,7 @@ public class MyUtil {
         return Util.rasterToImage(target);
 	}
 	
-	public static boolean checkCoallison(int x1, int y1, int x2, int y2, int width1, int height1, int width2, int height2, AffineTransform transform){
-		double size = Math.sqrt(width1*width1+height1*height1);
-		x1 -= (size-width1)/2;
-		y1 -= (size-height1)/2;
-		if (x1 + size >= x2 && x1 <= x2 + width2 && y1 + size >= y2 && y1 <= y2 + height2) {
+	public static boolean checkCoallison(int x2, int y2, int width1, int height1, int width2, int height2, AffineTransform transform){
 	       Point2D point = new Point2D.Double();
 	       transform.transform(new Point2D.Double(0,0), point);
 	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
@@ -296,8 +292,11 @@ public class MyUtil {
 	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
 	       transform.transform(new Point2D.Double(width1,height1/2), point);
 	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
-	        }
-	        return false;
+	       transform.transform(new Point2D.Double(width1/2,0), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       transform.transform(new Point2D.Double(width1/2,height1), point);
+	       if (point.getX() >= x2 && point.getX() <= x2 + width2 && point.getY() >= y2 && point.getY() <= y2 + height2) return true;
+	       return false;
 	}
 	
 	public static boolean checkBound(int x, int y,int width,int height, AffineTransform transform){
