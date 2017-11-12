@@ -95,7 +95,7 @@ public class Background {
 			int x = Math.abs(rnd.nextInt()) % mapW;
 			int y = Math.abs(rnd.nextInt()) % mapH;
 			int tree = Math.abs(rnd.nextInt()) % 4;
-			if(tileMap[x][y] !=  6){
+			if(tileMap[x][y] !=  10){
 			tileMap[x][y] = 3 + tree;
 			if(tileMap[x][y] ==  6){
 				tileMap[x][y] = 10;
