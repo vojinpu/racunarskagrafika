@@ -39,6 +39,8 @@ public class Patuljak {
 		image = Util.loadImage("character.png");
 		imageW = image.getWidth() / TILE_W;
 		imageH = image.getHeight() / TILE_H;
+		
+		speedX = -10;
 
 		moves = 200;
 
@@ -61,7 +63,7 @@ public class Patuljak {
 			row = 0;
 		if (speedX > 0)
 			row = 1;
-		if (speedY > 0)
+		if (speedY < 0)
 			row = 2;
 		if (speedY > 0)
 			row = 3;
@@ -77,12 +79,19 @@ public class Patuljak {
 		}
 		
 		if(deadCounter < 300){
+			
+			if(deadCounter < 0){
+			
+				Background.instance.setTileMap(poljeX, poljeY, 6);
+				
+			}
+			else{
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 			
 			g.drawImage(image, x - Background.instance.getCamX(), y - Background.instance.getCamY(),
 					image.getWidth(), image.getHeight(), null);
 			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.00f));
-			
+			}
 		}
 		else
 		g.drawImage(image, x - Background.instance.getCamX(), y - Background.instance.getCamY(),
@@ -113,7 +122,7 @@ public class Patuljak {
 			}
 			
 			else {
-				
+				fireB = false;
 				alpha = 1.00f;
 				image = Util.loadImage("tileset/svgset6.png");
 				
@@ -153,11 +162,15 @@ public class Patuljak {
 
 				speedX = 0;
 				speedY = (r.nextInt(10) - 5) * 3;
+				if(speedY == 0)
+					speedY = 5;
 
 			} else {
 
 				speedY = 0;
 				speedX = (r.nextInt(10) - 5) * 3;
+				if(speedX == 0)
+					speedX = 5;
 
 			}
 

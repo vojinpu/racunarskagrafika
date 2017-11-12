@@ -336,6 +336,12 @@ public class Background {
 		}
 	}
 	
+	public void setTileMap(int x, int y, int n){
+		
+		tileMap[x][y] = n;
+		
+	}
+	
 	public void addFire(float x, float y){
 		int poljeX = (int) ((x + camX) / TILE_W);
 		int poljeY = (int) ((y + camY) / TILE_H);
