@@ -62,11 +62,13 @@ public class Rain {
 			public void run() {
 				// TODO Auto-generated method stub
 				while (true) {
+					if(Game.gameStatus == GameStatus.END)return;
 					if(Game.gameStatus == GameStatus.RUNNING)counter+=addCounter;
-					if(counter == 500 || counter == 0) {
-						addCounter = -addCounter;
-						if(counter==0)isRaining = !isRaining;
-					}
+					if(counter >= 500)addCounter = -1;
+						if(counter<=0) {
+							isRaining = !isRaining;
+							addCounter = 1;
+						}
 					for(int i = 0;i < rainDrops.size();i++) {
 						RainDrop drop = rainDrops.get(i);
 						drop.x++;

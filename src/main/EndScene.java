@@ -147,7 +147,6 @@ public class EndScene {
 						}
 						
 					}
-					System.out.println("eve odje");
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {

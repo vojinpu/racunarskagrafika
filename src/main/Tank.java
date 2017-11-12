@@ -234,7 +234,7 @@ public class Tank {
 	}
 	
 	public void moveParashute() {
-		y+= (1.0f / 10) * 8;
+		y+= (1.0f / 10) * 5;
 		
 		tankTransform.setToIdentity();
 		tankTransform.translate(x, y);
