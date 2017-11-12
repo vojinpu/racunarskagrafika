@@ -25,9 +25,6 @@ public class BulletsList {
 	public void drawBullets(Graphics2D g) {
 		for (Bullet bullet : bullets) {
 			g.drawImage(bullet.getBulletImage(), bullet.getTransform(), null);
-			Point2D point = new Point2D.Double();
-			bullet.getTransform().transform(new Point2D.Double(bullet.getBulletImage().getWidth(),bullet.getBulletImage().getHeight()/2), point);
-			g.fillRect((int)point.getX(), (int)point.getY(), 10, 10);
 		}
 	}
 	public void moveBullets(int width, int height, Background background, Explosions explosions) {
