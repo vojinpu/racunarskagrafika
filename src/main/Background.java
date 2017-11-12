@@ -111,7 +111,7 @@ public class Background {
 		for (int i = -1; i <=  2; i++)
 			for (int j = -1; j <= 2; j++)
 				if (startX + i >= 0 && startX + i < mapW && startY + j >= 0 && startY + j < mapH){
-					if(tileMap[startX + i][startY + j] ==  6)
+					if(tileMap[startX + i][startY + j] ==  10)
 						counterTarget--;
 					tileMap[startX + i][startY + j] = 5;
 				}
